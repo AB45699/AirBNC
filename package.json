@@ -1,0 +1,26 @@
+{
+  "name": "airbnc",
+  "version": "1.0.0",
+  "description": "This is an API for a property rental service.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "airbnc_test": "psql -f create-database.sql"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AB45699/AirBNC.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/AB45699/AirBNC/issues"
+  },
+  "homepage": "https://github.com/AB45699/AirBNC#readme",
+  "dependencies": {
+    "dotenv": "^17.2.2",
+    "pg": "^8.16.3"
+  }
+}
