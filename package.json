@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "airbnc_test": "psql -f create-database.sql"
+    "create-db": "psql -f ./db/create-database.sql",
+    "seed": "node ./db/seed-run.js"
   },
   "repository": {
     "type": "git",
