@@ -1,12 +1,14 @@
-function createUsersRef(users) {
-    let usersRefObj = {};
-    if (users.length === 0) return {};
+function createHostsRef(users) {
+    let hostsRefObj = {};
 
-    for (const user of users) {
-        const fullname = user["first_name"] + " " + user["surname"];
-        usersRefObj[fullname] = user["user_id"]
-    }
-    return usersRefObj;
+    users.forEach(({first_name, surname, user_id, is_host}) =>{
+        if (is_host) {
+            const hostName = `${first_name} ${surname}`;
+            hostsRefObj[hostName] = user_id;
+        }
+    });
+
+    return hostsRefObj;
 }
 
-module.exports = createUsersRef;
+module.exports = createHostsRef;
