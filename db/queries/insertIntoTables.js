@@ -3,7 +3,7 @@ const format = require("pg-format");
 const { createUsersRef } = require("../utility functions/createUsersRefs.js");
 const { createPropertiesRef } = require("../utility functions/createPropertiesRef.js");
 
-async function insertIntoTables(propertyTypes, users, properties, reviews, images) {
+async function insertIntoTables(propertyTypes, users, properties, reviews, images, favourites) {
     
     await db.query(
         format(
@@ -67,6 +67,16 @@ async function insertIntoTables(propertyTypes, users, properties, reviews, image
                 propertiesRefs[property_name], 
                 image_url, 
                 alt_tag
+            ])
+        )
+    );
+
+    await db.query(
+        format(
+            `INSERT INTO favourites (guest_id, property_id) VALUES %L;`, 
+            favourites.map(({ guest_name, property_name }) => [
+                usersRefs[guest_name],
+                propertiesRefs[property_name], 
             ])
         )
     );

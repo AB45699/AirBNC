@@ -42,13 +42,21 @@ async function createTables() {
         FOREIGN KEY (guest_id) REFERENCES users (user_id)
         )`);
     
-        await db.query(`CREATE TABLE images (
+    await db.query(`CREATE TABLE images (
         image_id SERIAL PRIMARY KEY,
         property_id INT NOT NULL, 
         image_url VARCHAR NOT NULL, 
         alt_text VARCHAR NOT NULL, 
         FOREIGN KEY (property_id) REFERENCES properties (property_id)
         );`)
+
+    await db.query(`CREATE TABLE favourites (
+        favourite_id SERIAL PRIMARY KEY, 
+        guest_id INT NOT NULL, 
+        property_id INT NOT NULL, 
+        FOREIGN KEY (property_id) REFERENCES properties (property_id),
+        FOREIGN KEY (guest_id) REFERENCES users (user_id)
+        )`)
 }
 
 module.exports = createTables;
