@@ -1,5 +1,4 @@
 function createPropertiesRef(properties) {
-  if (properties.length === 0) return {};
   let propertiesRefObj = {};
 
   properties.forEach(({ name, property_id }) => {
