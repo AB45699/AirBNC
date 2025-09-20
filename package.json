@@ -4,7 +4,7 @@
   "description": "This is an API for a property rental service.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "create-db": "psql -f ./db/create-database.sql",
     "seed": "node ./db/seed-run.js"
   },
