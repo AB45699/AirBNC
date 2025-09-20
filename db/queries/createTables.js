@@ -1,6 +1,7 @@
 const db = require("../connection.js");
 
 async function createTables() {
+    
     await db.query(`CREATE TABLE users (
         user_id SERIAL PRIMARY KEY, 
         first_name VARCHAR NOT NULL,
@@ -40,6 +41,14 @@ async function createTables() {
         FOREIGN KEY (property_id) REFERENCES properties (property_id),
         FOREIGN KEY (guest_id) REFERENCES users (user_id)
         )`);
+    
+        await db.query(`CREATE TABLE images (
+        image_id SERIAL PRIMARY KEY,
+        property_id INT NOT NULL, 
+        image_url VARCHAR NOT NULL, 
+        alt_text VARCHAR NOT NULL, 
+        FOREIGN KEY (property_id) REFERENCES properties (property_id)
+        );`)
 }
 
 module.exports = createTables;
