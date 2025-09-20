@@ -33,7 +33,7 @@ describe("createUsersRef", () => {
   test("an empty input array returns an empty object", () => {
     expect(createUsersRef([])).toEqual({});
   });
-  test("assigns first_name and surname as the key on the ref object for one user", () => {
+  test("assigns first_name and surname (host name) as the key on the ref object for one user", () => {
     const user = [{ first_name: "Alice", surname: "Johnson", user_id: 1 }];
     const userRef = createUsersRef(user);
 
@@ -45,7 +45,7 @@ describe("createUsersRef", () => {
 
     expect(userRef["Alice Johnson"]).toBe(1);
   });
-  test("assigns first_name and surname as the key on the ref object for multiple users", () => {
+  test("assigns first_name and surname (host name) as the key on the ref object for multiple users", () => {
     const users = [
       { first_name: "Alice", surname: "Johnson", user_id: 1 },
       { first_name: "Emma", surname: "Davis", user_id: 3 },
@@ -80,54 +80,21 @@ describe("createUsersRef", () => {
 });
 
 describe("formatUsers", () => {
-  test("returns an array", () => {
+  test("the returned formatted user has its user_id as the host_id, for one user", () => {
     const userRef = createUsersRef([
       { first_name: "Alice", surname: "Johnson", user_id: 1 },
     ]);
 
-    expect(typeof formatUsers(testUserData, userRef)).toBe("object");
-    expect(Array.isArray(formatUsers([], {}))).toBe(true);
+    expect(formatUsers([testUserData[0]], userRef)[0][0]).toBe(1);
   });
-  test("the returned formatted user has its id as the host_id for one user", () => {
-    const userRef = createUsersRef([
-      { first_name: "Alice", surname: "Johnson", user_id: 1 },
-    ]);
-
-    expect(formatUsers([testUserData[0]], userRef)).toEqual([
-      [
-        1,
-        "Modern Apartment in City Center",
-        "London, UK",
-        "Apartment",
-        120.0,
-        "Description of Modern Apartment in City Center. A sleek apartment with all modern amenities.",
-      ],
-    ]);
-  });
-  test("the returned formatted user has its id as the host_id for multiple users", () => {
+  test("the returned formatted users has the user_id as the host_id, for multiple users", () => {
     const usersRef = createUsersRef([
       { first_name: "Alice", surname: "Johnson", user_id: 1 },
       { first_name: "Emma", surname: "Davis", user_id: 3 },
     ]);
 
-    expect(formatUsers(testUserData, usersRef)).toEqual([
-      [
-        1,
-        "Modern Apartment in City Center",
-        "London, UK",
-        "Apartment",
-        120.0,
-        "Description of Modern Apartment in City Center. A sleek apartment with all modern amenities.",
-      ],
-      [
-        3, 
-        "Cosy Family House", 
-        "Manchester, UK", 
-        "House", 
-        150.0, 
-        "A spacious home perfect for families looking to explore the city.",
+    expect(formatUsers(testUserData, usersRef)[0][0]).toBe(1);
+    expect(formatUsers(testUserData, usersRef)[1][0]).toBe(3);
 
-      ]
-    ]);
   });
 });

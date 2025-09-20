@@ -45,7 +45,7 @@ async function seed(propertyTypes, users, properties) {
     
     const { rows: insertedUsers } = await db.query(
         format(
-            `INSERT INTO users (first_name, surname, email, phone_number, is_host, avatar) VALUES %L RETURNING first_name, surname, user_id, is_host;`,
+            `INSERT INTO users (first_name, surname, email, phone_number, is_host, avatar) VALUES %L RETURNING first_name, surname, user_id;`,
             users.map(({first_name, surname, email, phone_number, is_host, avatar}) => [first_name, surname, email, phone_number, is_host, avatar])
         )
     );
