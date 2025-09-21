@@ -103,6 +103,21 @@ async function insertIntoTables(propertyTypes, users, properties, reviews, image
             allAmenities.flat().map((amenity) => amenity)
         )
     );
+
+    const propertiesToAmenities = properties.map(({ name, amenities }) => {
+        return amenities.flat().map((amenity) => [name, amenity])
+    })
+
+    
+    await db.query(
+        format(
+            `INSERT INTO properties_amenities (property_id, amenity_slug) VALUES %L;`,
+            propertiesToAmenities.flat().map((propToAmenity) => [
+                propertiesRefs[propToAmenity[0]], 
+                propToAmenity[1]
+        ])
+        )
+    )
 }
 
 module.exports = insertIntoTables;
