@@ -3,7 +3,7 @@ const format = require("pg-format");
 const { createUsersRef } = require("../utility functions/createUsersRefs.js");
 const { createPropertiesRef } = require("../utility functions/createPropertiesRef.js");
 
-async function insertIntoTables(propertyTypes, users, properties, reviews, images, favourites) {
+async function insertIntoTables(propertyTypes, users, properties, reviews, images, favourites, bookings) {
     
     await db.query(
         format(
@@ -78,6 +78,29 @@ async function insertIntoTables(propertyTypes, users, properties, reviews, image
                 usersRefs[guest_name],
                 propertiesRefs[property_name], 
             ])
+        )
+    );
+
+    await db.query(
+        format(
+            `INSERT INTO bookings (property_id, guest_id, check_in_date, check_out_date ) VALUES %L;`, 
+            bookings.map(({ property_name, guest_name, check_in_date, check_out_date }) => [
+                propertiesRefs[property_name],
+                usersRefs[guest_name],
+                check_in_date, 
+                check_out_date,
+            ])
+        )
+    );
+
+    const allAmenities = properties.map(({ amenities }) => {
+        return amenities.flat().map((amenity) => [amenity])
+    })
+
+    await db.query(
+        format(
+            `INSERT INTO amenities (amenity) VALUES %L ON CONFLICT DO NOTHING;`, 
+            allAmenities.flat().map((amenity) => amenity)
         )
     );
 }

@@ -48,7 +48,7 @@ async function createTables() {
         image_url VARCHAR NOT NULL, 
         alt_text VARCHAR NOT NULL, 
         FOREIGN KEY (property_id) REFERENCES properties (property_id)
-        );`)
+        );`);
 
     await db.query(`CREATE TABLE favourites (
         favourite_id SERIAL PRIMARY KEY, 
@@ -56,7 +56,22 @@ async function createTables() {
         property_id INT NOT NULL, 
         FOREIGN KEY (property_id) REFERENCES properties (property_id),
         FOREIGN KEY (guest_id) REFERENCES users (user_id)
-        )`)
+        );`);
+
+    await db.query(`CREATE TABLE bookings (
+        booking_id SERIAL PRIMARY KEY, 
+        property_id INT NOT NULL,
+        guest_id INT NOT NULL, 
+        check_in_date DATE NOT NULL, 
+        check_out_date DATE NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (property_id) REFERENCES properties (property_id),
+        FOREIGN KEY (guest_id) REFERENCES users (user_id)
+        );`);
+    
+    await db.query(`CREATE TABLE amenities (
+        amenity VARCHAR PRIMARY KEY
+        );`);
 }
 
 module.exports = createTables;
