@@ -2,16 +2,14 @@ const db = require("../connection.js");
 const format = require("pg-format"); 
 const { createUsersRef } = require("../utility functions/createUsersRefs.js");
 const { createPropertiesRef } = require("../utility functions/createPropertiesRef.js");
+const insertPropertyTypes = require("./insert-functions/insertPropertyTypes.js");
 
 async function insertIntoTables(propertyTypes, users, properties, reviews, images, favourites, bookings) {
     
     await db.query(
         format(
             `INSERT INTO property_types (property_type, description) VALUES %L;`,
-            propertyTypes.map(({ property_type, description }) => [
-                property_type, 
-                description
-            ])
+            insertPropertyTypes(propertyTypes)
         ));
     
     const { rows: insertedUsers } = await db.query(
@@ -42,7 +40,7 @@ async function insertIntoTables(propertyTypes, users, properties, reviews, image
                     price_per_night, 
                     description
                 ])
-        )
+        ) 
     );
 
     const propertiesRefs = createPropertiesRef(insertedProperties);
@@ -94,25 +92,25 @@ async function insertIntoTables(propertyTypes, users, properties, reviews, image
     );
 
     const allAmenities = properties.map(({ amenities }) => {
-        return amenities.flat().map((amenity) => [amenity])
-    })
+        return amenities.map((amenity) => [amenity]) 
+    }).flat() 
 
     await db.query(
         format(
             `INSERT INTO amenities (amenity) VALUES %L ON CONFLICT DO NOTHING;`, 
-            allAmenities.flat().map((amenity) => amenity)
+            allAmenities
         )
     );
 
     const propertiesToAmenities = properties.map(({ name, amenities }) => {
-        return amenities.flat().map((amenity) => [name, amenity])
-    })
-
+        return amenities.map((amenity) => [name, amenity])
+    }).flat() 
+    
     
     await db.query(
         format(
             `INSERT INTO properties_amenities (property_id, amenity_slug) VALUES %L;`,
-            propertiesToAmenities.flat().map((propToAmenity) => [
+            propertiesToAmenities.map((propToAmenity) => [
                 propertiesRefs[propToAmenity[0]], 
                 propToAmenity[1]
         ])
