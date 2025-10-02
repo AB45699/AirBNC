@@ -25,7 +25,32 @@ describe("app", ()=> {
                 expect(property).toHaveProperty("location");
                 expect(property).toHaveProperty("price_per_night");
                 expect(property).toHaveProperty("host");
-            })
+            });
+        });
+        test("the length of the returned array should be 10 to reflect total number of properties", async ()=>{
+            const { body } = await request(app).get("/api/properties");
+
+            expect(body.properties.length).toBe(10);
+        });
+        test("the properties are ordered by how many favourites they have, in descending order", async () =>{
+            const { body } = await request(app).get("/api/properties");
+            const expectedOrder = [
+                "Luxury Penthouse with View", 
+                "Seafront Villa with Infinity Pool", 
+                "Lakeside Luxury Villa", 
+                "Quaint Cottage in the Hills", 
+                "Elegant City Apartment", 
+                "Mountain View Chalet", 
+                "Modern Apartment in City Center", 
+                "Stylish Loft in Shoreditch", 
+                "Cosy Country Cottage", 
+                "Cosy Loft in the Heart of the City"
+            ]; 
+
+            body.properties.forEach((property, index) => {
+                expect(property.property_name).toBe(expectedOrder[index]);
+            });
+
         })
     });
 });
