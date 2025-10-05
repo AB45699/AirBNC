@@ -9,6 +9,7 @@ exports.getProperties = async (req, res, next) => {
 
 exports.getPropertyById = async (req, res, next) => {
     const { id } = req.params;
+    const { user_id } = req.query;
     const property = await fetchProperty(id);
 
     res.status(200).send({property});

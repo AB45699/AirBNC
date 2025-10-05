@@ -401,6 +401,13 @@ describe("app", () => {
         
         expect(body.property.property_name).toBe(expectedPropertyName);
     });
-    
+    describe("optional query - user_id", ()=>{
+        test("when user_id query used, the object on the property key has a 'favourited' key added", async () => {
+            const { body } = await request(app).get("/api/properties/2?user_id=3");
+
+            expect(body.property).toHaveProperty("favourited");
+        })
+    })
+
   })
 });
