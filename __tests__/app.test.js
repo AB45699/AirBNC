@@ -246,7 +246,129 @@ describe("app", () => {
                 });
             })
         })
+        describe("combined queries", ()=>{
+            test("returns price per night in low to high/asc order for a combined query; tied are ordered by id", async ()=>{
+                const { body } = await request(app).get("/api/properties?sort=price_per_night&order=asc");
+                const expectedOrder =    [
+                    'Charming Studio Retreat',
+                    'Chic Studio Near the Beach',
+                    'Seaside Studio Getaway',
+                    'Bright and Airy Studio',
+                    'Elegant City Apartment',
+                    'Modern Apartment in City Center',
+                    'Forest Hideaway Cabin',
+                    'Cosy Loft in the Heart of the City',
+                    'Cosy Country Cottage',
+                    'Cosy Family House',
+                    'Mountain View Chalet',
+                    'Coastal Retreat with Garden',
+                    'Quaint Cottage in the Hills',
+                    'Spacious Countryside House',
+                    'Urban Loft with Modern Amenities',
+                    'Stylish Loft in Shoreditch',
+                    'Luxury Penthouse with View',
+                    'Lakeside Luxury Villa',
+                    'Seafront Villa with Infinity Pool',
+                    'Historic Castle Stay'
+                ];
 
-    })
+                body.properties.forEach((property, index) => {
+                expect(property.property_name).toBe(expectedOrder[index]);
+                });
+            });
+            test("invalid sort with valid order returns properties sorted by favourites using the given order; tied ordered by id", async ()=>{
+                const { body } = await request(app).get("/api/properties?sort=ab123&order=asc");
+                const expectedOrder =  [
+                    'Cosy Family House',
+                    'Chic Studio Near the Beach',
+                    'Charming Studio Retreat',
+                    'Spacious Countryside House',
+                    'Seaside Studio Getaway',
+                    'Bright and Airy Studio',
+                    'Coastal Retreat with Garden',
+                    'Urban Loft with Modern Amenities',
+                    'Forest Hideaway Cabin',
+                    'Historic Castle Stay',
+                    'Cosy Loft in the Heart of the City',
+                    'Cosy Country Cottage',
+                    'Modern Apartment in City Center',
+                    'Mountain View Chalet',
+                    'Stylish Loft in Shoreditch',
+                    'Elegant City Apartment',
+                    'Luxury Penthouse with View',
+                    'Quaint Cottage in the Hills',
+                    'Seafront Villa with Infinity Pool',
+                    'Lakeside Luxury Villa'
+                ];
+
+                
+                body.properties.forEach((property, index) => {
+                expect(property.property_name).toBe(expectedOrder[index]);
+                });
+            });
+            test("valid sort with invalid order returns properties sorted by given sort in desc order; tied ordered by id", async () => {
+                const { body } = await request(app).get("/api/properties?sort=popularity&order=ab123");
+                const expectedOrder = [
+                    "Modern Apartment in City Center",
+                    "Charming Studio Retreat", 
+                    "Luxury Penthouse with View", 
+                    "Quaint Cottage in the Hills", 
+                    "Cosy Family House", 
+                    "Elegant City Apartment", 
+                    "Spacious Countryside House", 
+                    "Seaside Studio Getaway", 
+                    "Chic Studio Near the Beach", 
+                    "Cosy Loft in the Heart of the City", 
+                    "Bright and Airy Studio", 
+                    "Coastal Retreat with Garden", 
+                    "Urban Loft with Modern Amenities", 
+                    "Forest Hideaway Cabin", 
+                    "Seafront Villa with Infinity Pool", 
+                    "Mountain View Chalet", 
+                    "Cosy Country Cottage", 
+                    "Stylish Loft in Shoreditch", 
+                    "Historic Castle Stay", 
+                    "Lakeside Luxury Villa"
+                ];
+
+                body.properties.forEach((property, index) => {
+                expect(property.property_name).toBe(expectedOrder[index]);
+                });
+
+            });
+            test("invalid sort and order queries returns properties ordered by favourites in desc order; tied ordered by id", async ()=>{
+                const { body } = await request(app).get("/api/properties?sort=xyz123&order=ab123");
+                const expectedOrder = [
+                    "Luxury Penthouse with View",
+                    "Quaint Cottage in the Hills",
+                    "Seafront Villa with Infinity Pool",
+                    "Lakeside Luxury Villa",
+                    "Elegant City Apartment",
+                    "Modern Apartment in City Center",
+                    "Mountain View Chalet",
+                    "Stylish Loft in Shoreditch",
+                    "Cosy Loft in the Heart of the City",
+                    "Cosy Country Cottage",
+                    "Cosy Family House",
+                    "Chic Studio Near the Beach",
+                    "Charming Studio Retreat",
+                    "Spacious Countryside House",
+                    "Seaside Studio Getaway",
+                    "Bright and Airy Studio",
+                    "Coastal Retreat with Garden",
+                    "Urban Loft with Modern Amenities",
+                    "Forest Hideaway Cabin",
+                    "Historic Castle Stay"
+                ];
+
+                body.properties.forEach((property, index) => {
+                    expect(property.property_name).toBe(expectedOrder[index]);
+                });
+            })
+
+        })
+    });
+
+
   });
 });
