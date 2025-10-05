@@ -125,7 +125,36 @@ describe("app", () => {
                 body.properties.forEach((property, index) => {
                 expect(property.property_name).toBe(expectedOrder[index]);
                 });
-            })
+            });
+            test("invalid sort queries - defaults to returning properties by favourites in descending order", async ()=>{
+                const { body } = await request(app).get("/api/properties?sort=ab123");
+                const expectedOrder = [
+                    "Luxury Penthouse with View",
+                    "Quaint Cottage in the Hills",
+                    "Seafront Villa with Infinity Pool",
+                    "Lakeside Luxury Villa",
+                    "Elegant City Apartment",
+                    "Modern Apartment in City Center",
+                    "Mountain View Chalet",
+                    "Stylish Loft in Shoreditch",
+                    "Cosy Loft in the Heart of the City",
+                    "Cosy Country Cottage",
+                    "Cosy Family House",
+                    "Chic Studio Near the Beach",
+                    "Charming Studio Retreat",
+                    "Spacious Countryside House",
+                    "Seaside Studio Getaway",
+                    "Bright and Airy Studio",
+                    "Coastal Retreat with Garden",
+                    "Urban Loft with Modern Amenities",
+                    "Forest Hideaway Cabin",
+                    "Historic Castle Stay"
+                ];
+
+                body.properties.forEach((property, index) => {
+                    expect(property.property_name).toBe(expectedOrder[index]);
+                });
+            });
         });
         describe("order queries", ()=>{
             test("ascending (asc) - when used alone, properties are returned by favourities (low to high); tied are ordered by id", async ()=>{
@@ -156,6 +185,64 @@ describe("app", () => {
                 
                 body.properties.forEach((property, index) => {
                 expect(property.property_name).toBe(expectedOrder[index]);
+                });
+            });
+            test("descending (desc) - when used alone, properties are returned by favourities (high to low); tied are ordered by id", async () => {
+                const { body } = await request(app).get("/api/properties?order=desc");
+                const expectedOrder = [
+                    "Luxury Penthouse with View",
+                    "Quaint Cottage in the Hills",
+                    "Seafront Villa with Infinity Pool",
+                    "Lakeside Luxury Villa",
+                    "Elegant City Apartment",
+                    "Modern Apartment in City Center",
+                    "Mountain View Chalet",
+                    "Stylish Loft in Shoreditch",
+                    "Cosy Loft in the Heart of the City",
+                    "Cosy Country Cottage",
+                    "Cosy Family House",
+                    "Chic Studio Near the Beach",
+                    "Charming Studio Retreat",
+                    "Spacious Countryside House",
+                    "Seaside Studio Getaway",
+                    "Bright and Airy Studio",
+                    "Coastal Retreat with Garden",
+                    "Urban Loft with Modern Amenities",
+                    "Forest Hideaway Cabin",
+                    "Historic Castle Stay"
+                ];
+
+                body.properties.forEach((property, index) => {
+                expect(property.property_name).toBe(expectedOrder[index]);
+                });
+            });
+            test("invalid order queries - defaults to returning properties by favourites in descending order", async () => {
+                const { body } = await request(app).get("/api/properties?order=ab123");
+                const expectedOrder = [
+                    "Luxury Penthouse with View",
+                    "Quaint Cottage in the Hills",
+                    "Seafront Villa with Infinity Pool",
+                    "Lakeside Luxury Villa",
+                    "Elegant City Apartment",
+                    "Modern Apartment in City Center",
+                    "Mountain View Chalet",
+                    "Stylish Loft in Shoreditch",
+                    "Cosy Loft in the Heart of the City",
+                    "Cosy Country Cottage",
+                    "Cosy Family House",
+                    "Chic Studio Near the Beach",
+                    "Charming Studio Retreat",
+                    "Spacious Countryside House",
+                    "Seaside Studio Getaway",
+                    "Bright and Airy Studio",
+                    "Coastal Retreat with Garden",
+                    "Urban Loft with Modern Amenities",
+                    "Forest Hideaway Cabin",
+                    "Historic Castle Stay"
+                ];
+
+                body.properties.forEach((property, index) => {
+                    expect(property.property_name).toBe(expectedOrder[index]);
                 });
             })
         })
