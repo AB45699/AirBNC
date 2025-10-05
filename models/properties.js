@@ -12,9 +12,9 @@ exports.fetchProperties = async (sort, order) => {
         DESC: `DESC`
     };
 
-    const sortBy = allowedSorts[sort] || allowedSorts.favourites;
-    const orderDirection = order ? allowedOrders[order.toUpperCase()] : allowedOrders.DESC;
-
+    const sortBy = allowedSorts[sort?.toLowerCase()] || allowedSorts.favourites;
+    const orderDirection = allowedOrders[order?.toUpperCase()] || allowedOrders.DESC;
+  
     const { rows: properties } = await db.query(
         `SELECT 
             properties.property_id, 
