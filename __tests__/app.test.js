@@ -371,4 +371,36 @@ describe("app", () => {
 
 
   });
+  describe("GET /api/properties/:id", () => {
+    test("should respond with a status code of 200", async () => {
+        await request(app).get("/api/properties/2").expect(200);
+    });
+    test("responds with an object on the key of property", async () => {
+        const { body } = await request(app).get("/api/properties/2");
+        
+        expect(typeof body.property).toBe("object");
+        expect(Array.isArray(body.property)).toBe(false);
+    });
+    test("the object on the property key has property_id, property_name, location, price_per_night, description, host, host_avatar, and favourite_count keys", async () => {
+        const { body } = await request(app).get("/api/properties/2");
+
+        expect(body.property).toHaveProperty("property_id");
+        expect(body.property).toHaveProperty("property_name");
+        expect(body.property).toHaveProperty("location");
+        expect(body.property).toHaveProperty("price_per_night");
+        expect(body.property).toHaveProperty("description");
+        expect(body.property).toHaveProperty("host");
+        expect(body.property).toHaveProperty("host_avatar");
+        expect(body.property).toHaveProperty("favourite_count");
+    });
+    test.each([
+        [4, "Elegant City Apartment"],
+        [8, "Seaside Studio Getaway"],
+    ])("id %i as the parameter returns the correct property name: %s", async (id, expectedPropertyName) => {
+        const { body } = await request(app).get(`/api/properties/${id}`);
+        
+        expect(body.property.property_name).toBe(expectedPropertyName);
+    });
+    
+  })
 });

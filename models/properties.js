@@ -39,4 +39,38 @@ exports.fetchProperties = async (sort, order) => {
     );
 
     return properties
+};
+
+exports.fetchProperty= async (id) => {
+    const {
+        rows: [property]
+    } = await db.query(
+        `SELECT 
+            properties.property_id, 
+            properties.name AS property_name,
+            properties.location, 
+            properties.price_per_night, 
+            properties.description, 
+            CONCAT(users.first_name, ' ', users.surname) AS host,
+            users.avatar AS host_avatar,
+            COUNT(favourites.property_id) AS favourite_count
+        FROM properties
+        JOIN users 
+            ON properties.host_id = users.user_id
+        LEFT OUTER JOIN favourites
+            ON properties.property_id = favourites.property_id
+        WHERE properties.property_id = $1
+        GROUP BY 
+            properties.property_id,
+            properties.name,
+            properties.location,
+            properties.price_per_night,
+            properties.description,
+            users.first_name,
+            users.surname,
+            users.avatar;`, [id]
+    );
+
+    return property
 }
+
