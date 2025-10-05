@@ -1,13 +1,19 @@
 const db = require("../db/connection.js");
 
-exports.fetchProperties = async (sort) => {
+exports.fetchProperties = async (sort, order) => {
     const allowedSorts = {
         price_per_night: `properties.price_per_night`, 
         popularity: `COALESCE (AVG(reviews.rating), 0)`, 
         favourites: `COUNT(favourites.property_id)`
     };
 
+    const allowedOrders = {
+        ASC: `ASC`, 
+        DESC: `DESC`
+    };
+
     const sortBy = allowedSorts[sort] || allowedSorts.favourites;
+    const orderDirection = order ? allowedOrders[order.toUpperCase()] : allowedOrders.DESC;
 
     const { rows: properties } = await db.query(
         `SELECT 
@@ -29,7 +35,7 @@ exports.fetchProperties = async (sort) => {
                 properties.property_id,
                 users.first_name,
                 users.surname)
-        ORDER BY ${sortBy} DESC, properties.property_id ASC;`
+        ORDER BY ${sortBy} ${orderDirection}, properties.property_id ASC;`
     );
 
     return properties

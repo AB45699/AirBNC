@@ -126,9 +126,39 @@ describe("app", () => {
                 expect(property.property_name).toBe(expectedOrder[index]);
                 });
             })
-            
         });
-        
+        describe("order queries", ()=>{
+            test("ascending (asc) - when used alone, properties are returned by favourities (low to high); tied are ordered by id", async ()=>{
+                const { body } = await request(app).get("/api/properties?order=asc");
+                const expectedOrder =  [
+                    'Cosy Family House',
+                    'Chic Studio Near the Beach',
+                    'Charming Studio Retreat',
+                    'Spacious Countryside House',
+                    'Seaside Studio Getaway',
+                    'Bright and Airy Studio',
+                    'Coastal Retreat with Garden',
+                    'Urban Loft with Modern Amenities',
+                    'Forest Hideaway Cabin',
+                    'Historic Castle Stay',
+                    'Cosy Loft in the Heart of the City',
+                    'Cosy Country Cottage',
+                    'Modern Apartment in City Center',
+                    'Mountain View Chalet',
+                    'Stylish Loft in Shoreditch',
+                    'Elegant City Apartment',
+                    'Luxury Penthouse with View',
+                    'Quaint Cottage in the Hills',
+                    'Seafront Villa with Infinity Pool',
+                    'Lakeside Luxury Villa'
+                ];
+
+                
+                body.properties.forEach((property, index) => {
+                expect(property.property_name).toBe(expectedOrder[index]);
+                });
+            })
+        })
 
     })
   });
