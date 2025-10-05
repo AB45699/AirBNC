@@ -68,7 +68,7 @@ describe("app", () => {
     });
     describe("optional queries", ()=>{
         describe("sort queries", ()=>{
-            test("price_per_night - properties ordered by price (high to low); tied are ordered by id", async ()=>{
+            test("price_per_night - properties ordered by price (high to low); tied are ordered by id", async () => {
                 const { body } = await request(app).get("/api/properties?sort=price_per_night");
                 const expectedOrder = [
                     "Historic Castle Stay",
@@ -95,9 +95,40 @@ describe("app", () => {
 
                 body.properties.forEach((property, index) => {
                 expect(property.property_name).toBe(expectedOrder[index]);
-                })  
+                });  
+            });
+            test("popularity - properties ordered by rating (high to low); tied are ordered by id", async () => {
+                const { body } = await request(app).get("/api/properties?sort=popularity");
+                const expectedOrder = [
+                    "Modern Apartment in City Center",
+                    "Charming Studio Retreat", 
+                    "Luxury Penthouse with View", 
+                    "Quaint Cottage in the Hills", 
+                    "Cosy Family House", 
+                    "Elegant City Apartment", 
+                    "Spacious Countryside House", 
+                    "Seaside Studio Getaway", 
+                    "Chic Studio Near the Beach", 
+                    "Cosy Loft in the Heart of the City", 
+                    "Bright and Airy Studio", 
+                    "Coastal Retreat with Garden", 
+                    "Urban Loft with Modern Amenities", 
+                    "Forest Hideaway Cabin", 
+                    "Seafront Villa with Infinity Pool", 
+                    "Mountain View Chalet", 
+                    "Cosy Country Cottage", 
+                    "Stylish Loft in Shoreditch", 
+                    "Historic Castle Stay", 
+                    "Lakeside Luxury Villa"
+                ];
+
+                body.properties.forEach((property, index) => {
+                expect(property.property_name).toBe(expectedOrder[index]);
+                });
             })
-        })
+            
+        });
+        
 
     })
   });

@@ -3,11 +3,11 @@ const db = require("../db/connection.js");
 exports.fetchProperties = async (sort) => {
     const allowedSorts = {
         price_per_night: `properties.price_per_night`, 
-        popularity: `reviews.rating`, 
+        popularity: `COALESCE (AVG(reviews.rating), 0)`, 
         favourites: `COUNT(favourites.property_id)`
     };
 
-    const sortBy = allowedSorts[sort] ? sort : allowedSorts.favourites;
+    const sortBy = allowedSorts[sort] || allowedSorts.favourites;
 
     const { rows: properties } = await db.query(
         `SELECT 
@@ -21,6 +21,8 @@ exports.fetchProperties = async (sort) => {
         ON properties.host_id = users.user_id
         LEFT OUTER JOIN favourites 
         ON properties.property_id = favourites.property_id
+        LEFT OUTER JOIN reviews 
+        ON properties.property_id = reviews.property_id
         GROUP BY (properties.name,  
                 properties.location, 
                 properties.price_per_night,
