@@ -384,14 +384,14 @@ describe("app", () => {
     test("the object on the property key has property_id, property_name, location, price_per_night, description, host, host_avatar, and favourite_count keys", async () => {
         const { body } = await request(app).get("/api/properties/2");
 
-        expect(body.property).toHaveProperty("property_id");
-        expect(body.property).toHaveProperty("property_name");
-        expect(body.property).toHaveProperty("location");
-        expect(body.property).toHaveProperty("price_per_night");
-        expect(body.property).toHaveProperty("description");
-        expect(body.property).toHaveProperty("host");
-        expect(body.property).toHaveProperty("host_avatar");
-        expect(body.property).toHaveProperty("favourite_count");
+        expect(body.property.property_id).toBe(2);
+        expect(body.property.property_name).toBe("Cosy Family House");
+        expect(body.property.location).toBe("Manchester, UK");
+        expect(body.property.price_per_night).toBe("150");
+        expect(body.property.description).toBe("A spacious home perfect for families looking to explore the city.");
+        expect(body.property.host).toBe("Alice Johnson");
+        expect(body.property.host_avatar).toBe("https://images.unsplash.com/photo-1531123897727-8f129e1688ce?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
+        expect(body.property.favourite_count).toBe("0");
     });
     test.each([
         [4, "Elegant City Apartment"],
@@ -403,7 +403,7 @@ describe("app", () => {
     });
     describe("optional query - user_id", ()=>{
         test("when user_id query used, the object on the property key has a 'favourited' key added", async () => {
-            const { body } = await request(app).get("/api/properties/2?user_id=3");
+            const { body } = await request(app).get("/api/properties/2?user_id=2");
 
             expect(body.property).toHaveProperty("favourited");
         })
