@@ -41,11 +41,11 @@ exports.fetchProperties = async (sort, order) => {
     return properties
 };
 
-exports.fetchProperty= async (id) => {
-    const {
-        rows: [property]
-    } = await db.query(
-        `SELECT 
+exports.fetchProperty= async (id, user_id) => {
+    let queryValues = [id];
+
+    let selectQuery = `
+        SELECT 
             properties.property_id, 
             properties.name AS property_name,
             properties.location, 
@@ -54,12 +54,17 @@ exports.fetchProperty= async (id) => {
             CONCAT(users.first_name, ' ', users.surname) AS host,
             users.avatar AS host_avatar,
             COUNT(favourites.property_id) AS favourite_count
+        `;
+
+    let joinQuery = ` 
         FROM properties
         JOIN users 
-            ON properties.host_id = users.user_id
+        ON properties.host_id = users.user_id
         LEFT OUTER JOIN favourites
-            ON properties.property_id = favourites.property_id
-        WHERE properties.property_id = $1
+        ON properties.property_id = favourites.property_id
+        `;
+
+    let groupByQuery = `
         GROUP BY 
             properties.property_id,
             properties.name,
@@ -68,9 +73,38 @@ exports.fetchProperty= async (id) => {
             properties.description,
             users.first_name,
             users.surname,
-            users.avatar;`, [id]
-    );
+            users.avatar 
+        `;
 
+    if (user_id) {
+        queryValues.push(user_id);
+        
+        joinQuery += `
+        LEFT OUTER JOIN favourites user_favourited
+            ON properties.property_id = user_favourited.property_id 
+            AND user_favourited.user_id = $2
+        `;
+
+        selectQuery += `, 
+        CASE
+            WHEN user_favourited.user_id IS NULL THEN false
+            ELSE true
+        END AS favourited
+    `;
+    }
+
+    const finalQuery = `
+        ${selectQuery}
+        ${joinQuery}
+        WHERE properties.property_id = $1
+        ${groupByQuery};
+    `;
+
+    const {
+        rows: [property]
+    } = await db.query(finalQuery, queryValues);
+
+    console.log(property)
     return property
 }
 
