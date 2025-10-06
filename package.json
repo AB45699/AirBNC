@@ -4,7 +4,8 @@
   "description": "This is an API for a property rental service.",
   "main": "index.js",
   "scripts": {
-    "test": "jest",
+    "test-utils": "jest utility",
+    "test": "jest app",
     "create-db": "psql -f ./db/create-database.sql",
     "seed": "node ./db/seed-run.js"
   },
@@ -22,6 +23,10 @@
   "homepage": "https://github.com/AB45699/AirBNC#readme",
   "dependencies": {
     "dotenv": "^17.2.2",
+    "express": "^5.1.0",
     "pg": "^8.16.3"
+  },
+  "devDependencies": {
+    "supertest": "^7.1.4"
   }
 }
