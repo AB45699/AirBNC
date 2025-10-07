@@ -1,5 +1,6 @@
 const express = require("express"); 
 const { getProperties, getPropertyById } = require("./controllers/properties");
+const { handlePathNotFound, handleBadRequests, handleServerErrors, handleCustomErrors } = require("./controllers/errors");
 
 const app = express(); 
 
@@ -9,12 +10,12 @@ app.get("/api/properties", getProperties);
 
 app.get("/api/properties/:id", getPropertyById);
 
-app.all("/*path", (req, res, next) => {
-    res.status(404).send({msg: "Path not found"}); 
-});
+app.all("/*path", handlePathNotFound);
 
-app.use((err, res, req, next)=>{
-    res.status(500).send({msg: "Server error"});
-});
+app.use(handleBadRequests);
+
+app.use(handleCustomErrors); 
+
+app.use(handleServerErrors);
 
 module.exports = app; 

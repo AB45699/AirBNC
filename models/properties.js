@@ -82,15 +82,19 @@ exports.fetchProperty= async (id, user_id) => {
         joinQuery += `
         LEFT OUTER JOIN favourites user_favourited
             ON properties.property_id = user_favourited.property_id 
-            AND user_favourited.user_id = $2
+            AND user_favourited.guest_id = $2
         `;
 
         selectQuery += `, 
         CASE
-            WHEN user_favourited.user_id IS NULL THEN false
-            ELSE true
+            WHEN user_favourited.guest_id IS NULL THEN 'false'
+            ELSE 'true'
         END AS favourited
     `;
+
+        groupByQuery += `
+        , user_favourited.guest_id
+        `
     }
 
     const finalQuery = `
@@ -103,8 +107,7 @@ exports.fetchProperty= async (id, user_id) => {
     const {
         rows: [property]
     } = await db.query(finalQuery, queryValues);
-
-    console.log(property)
+    
     return property
 }
 

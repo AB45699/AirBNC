@@ -401,11 +401,36 @@ describe("app", () => {
         
         expect(body.property.property_name).toBe(expectedPropertyName);
     });
+    test("400: invalid property id", async () => {
+        const { body } = await request(app).get("/api/properties/invalid-id").expect(400); 
+
+        expect(body.msg).toBe("Bad request");
+    });
+    test("404: valid but non existent property id", async ()=>{
+        const { body } = await request(app).get("/api/properties/938476").expect(404);
+
+        expect(body.msg).toBe("Property not found");
+    })
     describe("optional query - user_id", ()=>{
         test("when user_id query used, the object on the property key has a 'favourited' key added", async () => {
-            const { body } = await request(app).get("/api/properties/2?user_id=2");
-
+            const { body } = await request(app).get("/api/properties/17?user_id=2");
+           
             expect(body.property).toHaveProperty("favourited");
+        });
+        test("there is no favourited key on the object on the property key if user_id query is not used", async ()=>{
+            const { body } = await request(app).get("/api/properties/17");
+
+            expect(body.property).not.toHaveProperty("favourited");
+        })
+        test("the favourited key has a value of true for a user who favourited the specific property", async () => {
+            const { body } = await request(app).get("/api/properties/17?user_id=2");
+
+            expect(body.property.favourited).toBe("true");
+        });
+        test("the favourited key has a value of false for a user who did not favourite the specific property", async () => {
+            const { body } = await request(app).get("/api/properties/19?user_id=2");
+
+            expect(body.property.favourited).toBe("false");
         })
     })
 
