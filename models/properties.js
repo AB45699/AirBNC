@@ -1,27 +1,28 @@
 const db = require("../db/connection.js");
 
-exports.fetchProperties = async (sort, order) => {
-    const allowedSorts = {
-        price_per_night: `properties.price_per_night`, 
-        popularity: `COALESCE (AVG(reviews.rating), 0)`, 
-        favourites: `COUNT(favourites.property_id)`
-    };
+exports.fetchProperties = async (sort="favourites", order="desc") => {
+    
+    const allowedSortQueries = ["popularity", "price_per_night", "favourites"];
+    const allowedOrderQueries = ["asc", "desc"];
+    
+    if (!allowedSortQueries.includes(sort.toLowerCase())) {
+        return Promise.reject({status: 400, msg: "Invalid sort query"});
+    } 
 
-    const allowedOrders = {
-        ASC: `ASC`, 
-        DESC: `DESC`
-    };
+    if (!allowedOrderQueries.includes(order.toLowerCase())) {
+        return Promise.reject({status: 400, msg: "Invalid order query"});
+    }
 
-    const sortBy = allowedSorts[sort?.toLowerCase()] || allowedSorts.favourites;
-    const orderDirection = allowedOrders[order?.toUpperCase()] || allowedOrders.DESC;
-  
     const { rows: properties } = await db.query(
         `SELECT 
             properties.property_id, 
             properties.name AS property_name, 
             properties.location, 
             properties.price_per_night, 
-            CONCAT(users.first_name, ' ', users.surname) AS host
+            CONCAT(users.first_name, ' ', users.surname) AS host,
+            COUNT(favourites.property_id) AS favourites,
+            COALESCE (AVG(reviews.rating), 0) AS popularity, 
+            properties.price_per_night AS price_per_night
         FROM properties
         JOIN users
         ON properties.host_id = users.user_id
@@ -35,7 +36,7 @@ exports.fetchProperties = async (sort, order) => {
                 properties.property_id,
                 users.first_name,
                 users.surname)
-        ORDER BY ${sortBy} ${orderDirection}, properties.property_id ASC;`
+        ORDER BY ${sort} ${order}, properties.property_id ASC;`
     );
 
     return properties
