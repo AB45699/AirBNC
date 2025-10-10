@@ -1,6 +1,13 @@
 const request = require("supertest");
 const app = require("../app.js");
 const db = require("../db/connection.js");
+const seed = require("../db/seed.js");
+const { propertyTypesData, usersData, propertiesData, reviewsData, imagesData, favouritesData, bookingsData } = require("../db/data/dev/index.js");
+
+
+beforeEach( async ()=>{
+    await seed(propertyTypesData, usersData, propertiesData, reviewsData, imagesData, favouritesData, bookingsData);
+});
 
 afterAll(() => {
   db.end();
@@ -264,5 +271,24 @@ describe("app", () => {
         });
     })
 
-  })
+  });
+  describe("POST /api/properties/:id/reviews", ()=>{
+    test("responds with a status of 201", async ()=> {
+        const testReview = { guest_id: 5, rating: 5, comment: "test review"};
+
+        await request(app).post("/api/properties/4/reviews").send(testReview).expect(201);
+    });
+    test("responds with a newly inserted review with a new review_id, and property_id, guest_id, rating, comment, and created_at keys", async () =>{
+        const testReview = { guest_id: 5, rating: 5, comment: "test review"};
+
+        const { body } = await request(app).post("/api/properties/4/reviews").send(testReview).expect(201);
+        
+        expect(body.propertyReview.review_id).toBe(11),
+        expect(body.propertyReview.property_id).toBe(4),
+        expect(body.propertyReview.guest_id).toBe(5),
+        expect(body.propertyReview.rating).toBe(5),
+        expect(body.propertyReview.comment).toBe("test review"),
+        expect(body.propertyReview).toHaveProperty("created_at");
+    });
+  });
 });

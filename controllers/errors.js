@@ -4,7 +4,7 @@ exports.handlePathNotFound = (req, res, next) => {
 
 exports.handleBadRequests = (err, req, res, next) => {
     const codes = ["22P02"];
-
+   
     if (codes.includes(err.code)) {
         res.status(400).send({msg: "Bad request"});
     } else {
@@ -21,5 +21,6 @@ exports.handleCustomErrors = (err, req, res, next) => {
 };
 
 exports.handleServerErrors = (err, req, res, next) => {
+    
     res.status(500).send({msg: "Server error"});
 }; 

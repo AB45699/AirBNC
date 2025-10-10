@@ -1,7 +1,7 @@
 const db = require("../db/connection.js");
 
 exports.fetchProperties = async (sort="favourites", order="desc") => {
-    
+
     const allowedSortQueries = ["popularity", "price_per_night", "favourites"];
     const allowedOrderQueries = ["asc", "desc"];
     
@@ -81,20 +81,20 @@ exports.fetchProperty= async (id, user_id) => {
         queryValues.push(user_id);
         
         joinQuery += `
-        LEFT OUTER JOIN favourites user_favourited
-            ON properties.property_id = user_favourited.property_id 
-            AND user_favourited.guest_id = $2
+        LEFT OUTER JOIN favourites user_favourites
+            ON properties.property_id = user_favourites.property_id 
+            AND user_favourites.guest_id = $2
         `;
 
         selectQuery += `, 
         CASE
-            WHEN user_favourited.guest_id IS NULL THEN 'false'
+            WHEN user_favourites.guest_id IS NULL THEN 'false'
             ELSE 'true'
         END AS favourited
     `;
 
         groupByQuery += `
-        , user_favourited.guest_id
+        , user_favourites.guest_id
         `
     }
 
@@ -110,5 +110,14 @@ exports.fetchProperty= async (id, user_id) => {
     } = await db.query(finalQuery, queryValues);
     
     return property
-}
+};
+
+exports.insertPropertyReview = async (guest_id, rating, comment, id) => {
+    const {rows: [propertyReview] } = await db.query(
+        `INSERT INTO reviews (property_id, guest_id, rating, comment)
+        VALUES 
+        ($1, $2, $3, $4) RETURNING *;`, [id, guest_id, rating, comment]);
+
+    return propertyReview;
+};
 

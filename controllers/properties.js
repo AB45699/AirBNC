@@ -1,5 +1,5 @@
 const { checkUserExists } = require("../models/checkUserExists");
-const { fetchProperties, fetchProperty } = require("../models/properties")
+const { fetchProperties, fetchProperty, insertPropertyReview } = require("../models/properties")
 
 exports.getProperties = async (req, res, next) => {
     const { sort, order } = req.query; 
@@ -26,4 +26,13 @@ exports.getPropertyById = async (req, res, next) => {
     };
 
     res.status(200).send({property});
-}
+};
+
+exports.postPropertyReview = async (req, res, next) => {
+    const { guest_id, rating, comment } = req.body;
+    const { id } = req.params;
+    
+    const propertyReview = await insertPropertyReview(guest_id, rating, comment, id);
+    
+    res.status(201).send({propertyReview});
+};

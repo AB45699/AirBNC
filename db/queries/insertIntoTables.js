@@ -1,7 +1,7 @@
 const db = require("../connection.js");
 const format = require("pg-format"); 
-const { createUsersRef } = require("../utility functions/createUsersRefs.js");
-const { createPropertiesRef } = require("../utility functions/createPropertiesRef.js");
+const { createUsersRef } = require("../utility-functions/createUsersRefs.js");
+const { createPropertiesRef } = require("../utility-functions/createPropertiesRef.js");
 const insertPropertyTypes = require("./insert-functions/insertPropertyTypes.js");
 
 async function insertIntoTables(propertyTypes, users, properties, reviews, images, favourites, bookings) {

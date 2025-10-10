@@ -1,5 +1,5 @@
 const express = require("express"); 
-const { getProperties, getPropertyById } = require("./controllers/properties");
+const { getProperties, getPropertyById, postPropertyReview } = require("./controllers/properties");
 const { handlePathNotFound, handleBadRequests, handleServerErrors, handleCustomErrors } = require("./controllers/errors");
 
 const app = express(); 
@@ -9,6 +9,8 @@ app.use(express.json());
 app.get("/api/properties", getProperties);
 
 app.get("/api/properties/:id", getPropertyById);
+
+app.post("/api/properties/:id/reviews", postPropertyReview);
 
 app.all("/*path", handlePathNotFound);
 
