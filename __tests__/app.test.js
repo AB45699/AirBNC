@@ -201,6 +201,14 @@ describe("app", () => {
         expect(typeof body.property).toBe("object");
         expect(Array.isArray(body.property)).toBe(false);
     });
+    test.each([
+        [4, "Elegant City Apartment"],
+        [8, "Seaside Studio Getaway"],
+    ])("id %i as the parameter returns the correct property name: %s", async (id, expectedPropertyName) => {
+        const { body } = await request(app).get(`/api/properties/${id}`);
+        
+        expect(body.property.property_name).toBe(expectedPropertyName);
+    });
     test("the object on the property key has property_id, property_name, location, price_per_night, description, host, host_avatar, and favourite_count keys", async () => {
         const { body } = await request(app).get("/api/properties/2");
 
@@ -213,14 +221,6 @@ describe("app", () => {
         expect(body.property.host_avatar).toBe("https://images.unsplash.com/photo-1531123897727-8f129e1688ce?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
         expect(body.property.favourite_count).toBe("0");
     });
-    test.each([
-        [4, "Elegant City Apartment"],
-        [8, "Seaside Studio Getaway"],
-    ])("id %i as the parameter returns the correct property name: %s", async (id, expectedPropertyName) => {
-        const { body } = await request(app).get(`/api/properties/${id}`);
-        
-        expect(body.property.property_name).toBe(expectedPropertyName);
-    });
     test("400: invalid property id", async () => {
         const { body } = await request(app).get("/api/properties/invalid-id").expect(400); 
 
@@ -230,9 +230,9 @@ describe("app", () => {
         const { body } = await request(app).get("/api/properties/938476").expect(404);
 
         expect(body.msg).toBe("Property not found");
-    })
+    });
     describe("optional query - user_id", ()=>{
-        test("when user_id query used, the object on the property key has a 'favourited' key added", async () => {
+        test("when user_id query is used, the object on the property key has a 'favourited' key added", async () => {
             const { body } = await request(app).get("/api/properties/17?user_id=2");
            
             expect(body.property).toHaveProperty("favourited");
@@ -251,7 +251,17 @@ describe("app", () => {
             const { body } = await request(app).get("/api/properties/19?user_id=2");
 
             expect(body.property.favourited).toBe("false");
-        })
+        });
+        test("400: invalid user_id", async () => {
+        const { body } = await request(app).get("/api/properties/17?user_id=invalid").expect(400); 
+
+        expect(body.msg).toBe("Bad request");
+        });
+        test("404: valid but non existent user_id", async ()=>{
+        const { body } = await request(app).get("/api/properties/17?user_id=938476").expect(404);
+      
+        expect(body.msg).toBe("User not found");
+        });
     })
 
   })
