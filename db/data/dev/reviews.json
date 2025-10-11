@@ -68,5 +68,13 @@
     "rating": 5,
     "comment": "This quaint cottage was absolutely lovely, offering a serene and private escape in the hills. We enjoyed the cozy fireplace, scenic surroundings, and charming decor throughout. It was exactly what we needed for a relaxing weekend.",
     "created_at": "2025-04-15T17:45:00Z"
+  },
+  {
+    "property_name": "Quaint Cottage in the Hills",
+    "guest_name": "Sophia Bennett",
+    "rating": 4,
+    "comment": "test review",
+    "created_at": "2024-04-15T17:45:00Z"
   }
+
 ]
