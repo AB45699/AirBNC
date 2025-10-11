@@ -290,5 +290,76 @@ describe("app", () => {
         expect(body.propertyReview.comment).toBe("test review"),
         expect(body.propertyReview).toHaveProperty("created_at");
     });
+    describe("error handling", ()=>{
+        test("responds with a 400 and error message if guest_id is not provided", async () => {
+        const testReview = { rating: 5, comment: "test review"};
+        const { body } = await request(app).post("/api/properties/4/reviews").send(testReview).expect(400);
+
+        expect(body.msg).toBe("Bad request");
+        });
+        test("responds with a 400 and error message if rating is not provided", async () => {
+        const testReview = { guest_id: 5, comment: "test review"};
+        const { body } = await request(app).post("/api/properties/4/reviews").send(testReview).expect(400);
+
+        expect(body.msg).toBe("Bad request");
+        });
+        test("responds with a newly inserted review even if comment is not provided", async () => {
+        const testReview = { guest_id: 5, rating: 5};
+        const { body } = await request(app).post("/api/properties/4/reviews").send(testReview).expect(201);
+
+        expect(body.propertyReview.review_id).toBe(11),
+        expect(body.propertyReview.property_id).toBe(4),
+        expect(body.propertyReview.guest_id).toBe(5),
+        expect(body.propertyReview.rating).toBe(5),
+        expect(body.propertyReview.comment).toBe(null),
+        expect(body.propertyReview).toHaveProperty("created_at");
+        });
+        test("responds with a 400 for an invalid property id", async () => {
+        const testReview = { guest_id: 5, rating: 5, comment: "test review"};
+        const { body } = await request(app).post("/api/properties/invalid-id/reviews").send(testReview).expect(400);
+
+        expect(body.msg).toBe("Bad request");
+        });
+        test("responds with a 404 for a valid but non-existent property id", async () => {
+        const testReview = { guest_id: 5, rating: 5, comment: "test review"};
+        const { body } = await request(app).post("/api/properties/40000/reviews").send(testReview).expect(404);
+
+        expect(body.msg).toBe("Property not found");
+        });
+        test("responds with a 400 and error message if guest_id is not an integer/invalid", async ()=>{
+            const testReview = { guest_id: "invalid", rating: 5, comment: "test review" };
+            const { body } = await request(app).post("/api/properties/4/reviews").send(testReview).expect(400);
+
+            expect(body.msg).toBe("Bad request");
+        });
+        test("responds with a 404 for a valid but non-existent guest_id", async () => {
+            const testReview = { guest_id: 400, rating: 5, comment: "test review" };
+            const { body } = await request(app).post("/api/properties/4/reviews").send(testReview).expect(404);
+
+            expect(body.msg).toBe("Guest not found");
+        });
+        test("responds with a 400 and error message if rating is not an integer/invalid", async ()=>{
+            const testReview = { guest_id: 5, rating: "invalid", comment: "test review" };
+            const { body } = await request(app).post("/api/properties/4/reviews").send(testReview).expect(400);
+
+            expect(body.msg).toBe("Bad request");
+        });
+        test.each([
+        [6, 400, "Bad request"],
+        [0, 400, "Bad request"],
+        [1, 201, undefined]
+    ])("rating >= 1 or <=5: %i  returns the correct status code '%s' and message '%s'", async (rating, status, message) => {
+        const testReview = { guest_id: 5, rating: rating, comment: "test review" };
+        const { body } = await request(app).post("/api/properties/4/reviews").send(testReview).expect(status);
+        
+        expect(body.msg).toBe(message);
+    });
+        test("responds with a 400 and error message if comment is not a string", async ()=>{
+            const testReview = { guest_id: 5, rating: 5, comment: 123 };
+            const { body } = await request(app).post("/api/properties/4/reviews").send(testReview).expect(400);
+
+            expect(body.msg).toBe("Bad request");
+        });
+    });
   });
 });
