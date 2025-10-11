@@ -112,12 +112,4 @@ exports.fetchProperty= async (id, user_id) => {
     return property
 };
 
-exports.insertPropertyReview = async (guest_id, rating, comment, id) => {
-    const {rows: [propertyReview] } = await db.query(
-        `INSERT INTO reviews (property_id, guest_id, rating, comment)
-        VALUES 
-        ($1, $2, $3, $4) RETURNING *;`, [id, guest_id, rating, comment]);
-
-    return propertyReview;
-};
 

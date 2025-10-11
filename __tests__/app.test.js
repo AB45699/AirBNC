@@ -362,4 +362,41 @@ describe("app", () => {
         });
     });
   });
+  describe.only("GET /api/properties/:id/reviews", ()=>{
+    test("should respond with a status code of 200", async ()=>{
+        await request(app).get("/api/properties/5/reviews").expect(200);
+    });
+    test("responds with an array on the key of reviews", async () => {
+      const { body } = await request(app).get("/api/properties/10/reviews");
+
+      expect(Array.isArray(body.reviews)).toBe(true);
+    });
+    test("each review object has review_id, comment, rating, created_at, guest, and guest_avatar keys", async () => {
+      const { body } = await request(app).get("/api/properties/10/reviews");
+
+      body.reviews.forEach((review) => {
+        expect(review).toHaveProperty("review_id");
+        expect(review).toHaveProperty("comment");
+        expect(review).toHaveProperty("rating");
+        expect(review).toHaveProperty("created_at");
+        expect(review).toHaveProperty("guest");
+        expect(review).toHaveProperty("guest_avatar");
+      });
+    });
+    test("the length of the returned array should be 2 to reflect total number of reviews for given property", async () => {
+        const { body } = await request(app).get("/api/properties/10/reviews");
+
+        expect(body.reviews.length).toBe(2);
+    });
+    test("responds with reviews ordered by newest to oldest", async () => {
+        const { body } = await request(app).get("/api/properties/10/reviews");
+
+        expect(body.reviews).toBeSortedBy("created_at", {descending: true});
+    });
+    test("the body has a key of average rating", async () => {
+        const { body } = await request(app).get("/api/properties/10/reviews");
+
+        expect(body.average_rating).toBe(4.5);
+    })
+  })
 });
