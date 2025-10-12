@@ -5,7 +5,7 @@ function getAverageRating(reviews) {
 
     const averageRating = totaledRatings/reviews.length;
 
-    return averageRating;
+    return isNaN(averageRating) ? 0 : averageRating;
 };
 
 module.exports = getAverageRating;
