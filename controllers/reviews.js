@@ -1,4 +1,6 @@
+const { checkPropertyExists } = require("../models/checkPropertyExists.js");
 const {insertPropertyReview, fetchPropertyReviews} = require("../models/reviews.js"); 
+const getAverageRating = require("../db/utility-functions/getAverageRating.js");
 
 exports.postPropertyReview = async (req, res, next) => {
     const { guest_id, rating, comment } = req.body;
@@ -15,14 +17,17 @@ exports.postPropertyReview = async (req, res, next) => {
 
 exports.getPropertyReviews = async (req, res, next) => {
     const { id } = req.params;
+
+    if (id) {
+        const property = await checkPropertyExists(id);
+        if (property === undefined) {
+            return Promise.reject({status: 404, msg: "Property not found"});
+        }
+    };
+
     const reviews = await fetchPropertyReviews(id);
-
-    const totaledRatings = reviews.reduce((sum, review)=>{
-        return sum += review.rating;
-    }, 0);
-
-    const averageRating = totaledRatings/reviews.length;
-
+    const averageRating = getAverageRating(reviews);
+    
     res.status(200).send({
         reviews,
         average_rating: averageRating
