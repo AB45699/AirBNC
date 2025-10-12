@@ -445,4 +445,35 @@ describe("app", () => {
         expect(body.msg).toBe("Review not found");
     })
   });
+  describe("GET /api/users/:id", ()=>{
+    test("should respond with a status code of 200", async () => {
+        await request(app).get("/api/users/3").expect(200);
+    });
+    test("responds with an object on the key of user", async ()=>{
+        const { body } = await request(app).get("/api/users/3");
+        
+        expect(typeof body.user).toBe("object");
+        expect(Array.isArray(body.user)).toBe(false);
+    });
+    test("each user object has user_id, first_name, surname, email, phone_number, avatar, and created_at keys", async () => {
+        const { body } = await request(app).get("/api/users/4");
+
+        expect(body.user.user_id).toBe(4);
+        expect(body.user.first_name).toBe("Frank");
+        expect(body.user.surname).toBe("White");
+        expect(body.user.email).toBe("frank@example.com");
+        expect(body.user.avatar).toBe("https://images.unsplash.com/photo-1540569014015-19a7be504e3a?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
+        expect(body.user).toHaveProperty("created_at");
+    });
+    test("400: invalid user_id", async () => {
+        const { body } = await request(app).get("/api/users/invalid-id").expect(400); 
+
+        expect(body.msg).toBe("Bad request");
+    });
+    test("404: valid but non existent user_id", async ()=>{
+        const { body } = await request(app).get("/api/users/938476").expect(404);
+
+        expect(body.msg).toBe("User not found");
+    });
+  })
 });
