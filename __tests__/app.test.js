@@ -419,5 +419,30 @@ describe("app", () => {
             expect(body.reviews).toEqual([]);
         });
     })
-  })
+  });
+  describe("DELETE /api/reviews/:id", ()=>{
+    test("should respond with a status code of 204 and no body", async () => {
+        const { body } = await request(app).delete("/api/reviews/3").expect(204);
+        expect(body).toEqual({});
+    });
+    test("the database deletes the review specified", async ()=>{
+        const currentReview = await db.query(`SELECT review_id FROM reviews WHERE review_id = 3`);
+        expect(currentReview.rows.length).toBe(1);
+
+        await request(app).delete("/api/reviews/3");
+
+        const afterDeletion = await db.query(`SELECT review_id FROM reviews WHERE review_id = 3`);
+        expect(afterDeletion.rows.length).toBe(0);
+    });
+    test("responds with a 400 for an invalid review id", async ()=>{
+        const { body } = await request(app).delete("/api/reviews/inavlid-id").expect(400);
+
+        expect(body.msg).toBe("Bad request");
+    });
+    test("responds with a 404 for a valid but non existent review id", async ()=>{
+        const { body } = await request(app).delete("/api/reviews/3000").expect(404);
+
+        expect(body.msg).toBe("Review not found");
+    })
+  });
 });

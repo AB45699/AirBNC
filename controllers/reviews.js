@@ -1,6 +1,7 @@
 const { checkPropertyExists } = require("../models/checkPropertyExists.js");
-const {insertPropertyReview, fetchPropertyReviews} = require("../models/reviews.js"); 
+const {insertPropertyReview, fetchPropertyReviews, deletePropertyReview} = require("../models/reviews.js"); 
 const getAverageRating = require("../db/utility-functions/getAverageRating.js");
+const { checkReviewExists } = require("../models/checkReviewExists.js");
 
 exports.postPropertyReview = async (req, res, next) => {
     const { guest_id, rating, comment } = req.body;
@@ -32,4 +33,16 @@ exports.getPropertyReviews = async (req, res, next) => {
         reviews,
         average_rating: averageRating
     })
+};
+
+exports.deletePropertyReview = async (req, res, next) => {
+    const { id } = req.params;
+    
+    if (await checkReviewExists(id) === undefined) {
+        return Promise.reject({status: 404, msg: "Review not found"});
+    }
+
+    await deletePropertyReview(id);
+
+    res.sendStatus(204);
 };

@@ -26,4 +26,13 @@ exports.fetchPropertyReviews = async (id) => {
     );
 
     return reviews;
-}
+};
+
+exports.deletePropertyReview = async (id) =>{
+    const { rows: deletedReview } = await db.query(
+        `DELETE FROM reviews
+        WHERE review_id = $1;`, [id]
+    );
+
+    return deletedReview;
+};
