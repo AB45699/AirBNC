@@ -283,7 +283,7 @@ describe("app", () => {
 
         const { body } = await request(app).post("/api/properties/4/reviews").send(testReview).expect(201);
         
-        expect(body.propertyReview.review_id).toBe(11),
+        expect(body.propertyReview.review_id).toBe(12),
         expect(body.propertyReview.property_id).toBe(4),
         expect(body.propertyReview.guest_id).toBe(5),
         expect(body.propertyReview.rating).toBe(5),
@@ -307,7 +307,7 @@ describe("app", () => {
         const testReview = { guest_id: 5, rating: 5};
         const { body } = await request(app).post("/api/properties/4/reviews").send(testReview).expect(201);
 
-        expect(body.propertyReview.review_id).toBe(11),
+        expect(body.propertyReview.review_id).toBe(12),
         expect(body.propertyReview.property_id).toBe(4),
         expect(body.propertyReview.guest_id).toBe(5),
         expect(body.propertyReview.rating).toBe(5),
@@ -397,6 +397,18 @@ describe("app", () => {
         const { body } = await request(app).get("/api/properties/10/reviews");
 
         expect(body.average_rating).toBe(4.5);
+    });
+    describe("error handling", ()=>{
+        test("responds with a 400 for an invalid property id", async () => {
+            const { body } = await request(app).get("/api/properties/invalid-id/reviews").expect(400);
+
+            expect(body.msg).toBe("Bad request");
+        });
+        test("responds with a 404 for a valid but non-existent property id", async () => {
+            const { body } = await request(app).get("/api/properties/40000/reviews").expect(404);
+
+            expect(body.msg).toBe("Property not found");
+        });
     })
   })
 });
