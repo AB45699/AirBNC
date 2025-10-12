@@ -362,7 +362,7 @@ describe("app", () => {
         });
     });
   });
-  describe.only("GET /api/properties/:id/reviews", ()=>{
+  describe("GET /api/properties/:id/reviews", ()=>{
     test("should respond with a status code of 200", async ()=>{
         await request(app).get("/api/properties/5/reviews").expect(200);
     });
@@ -383,10 +383,14 @@ describe("app", () => {
         expect(review).toHaveProperty("guest_avatar");
       });
     });
-    test("the length of the returned array should be 2 to reflect total number of reviews for given property", async () => {
-        const { body } = await request(app).get("/api/properties/10/reviews");
-
-        expect(body.reviews.length).toBe(2);
+    test.each([
+        [2, 10],
+        [0, 19],
+        [1, 4]
+    ])("the length of the returned array should be: %i to reflect total number of reviews for the property with id: %i", async (length, property_id) => {
+        const { body } = await request(app).get(`/api/properties/${property_id}/reviews`);
+        
+        expect(body.reviews.length).toBe(length);
     });
     test("responds with reviews ordered by newest to oldest", async () => {
         const { body } = await request(app).get("/api/properties/10/reviews");
@@ -408,6 +412,11 @@ describe("app", () => {
             const { body } = await request(app).get("/api/properties/40000/reviews").expect(404);
 
             expect(body.msg).toBe("Property not found");
+        });
+        test("for a valid property with no reviews, an empty array is returned", async ()=>{
+            const { body } = await request(app).get("/api/properties/19/reviews");
+
+            expect(body.reviews).toEqual([]);
         });
     })
   })
