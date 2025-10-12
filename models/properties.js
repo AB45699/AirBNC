@@ -15,27 +15,26 @@ exports.fetchProperties = async (sort="favourites", order="desc") => {
 
     const { rows: properties } = await db.query(
         `SELECT 
-            properties.property_id, 
-            properties.name AS property_name, 
-            properties.location, 
-            properties.price_per_night, 
+            properties.property_id,
+            properties.name AS property_name,
+            properties.location,
+            properties.price_per_night,
             CONCAT(users.first_name, ' ', users.surname) AS host,
-            COUNT(favourites.property_id) AS favourites,
-            COALESCE (AVG(reviews.rating), 0) AS popularity, 
-            properties.price_per_night AS price_per_night
-        FROM properties
-        JOIN users
-        ON properties.host_id = users.user_id
-        LEFT OUTER JOIN favourites 
-        ON properties.property_id = favourites.property_id
-        LEFT OUTER JOIN reviews 
-        ON properties.property_id = reviews.property_id
-        GROUP BY (properties.name,  
-                properties.location, 
-                properties.price_per_night,
-                properties.property_id,
-                users.first_name,
-                users.surname)
+            COALESCE(favourites_count, 0) AS favourites,
+            COALESCE(avg_rating, 0) AS popularity
+        FROM properties 
+        JOIN users 
+            ON properties.host_id = users.user_id
+        LEFT JOIN (
+            SELECT property_id, COUNT(*) AS favourites_count
+            FROM favourites
+            GROUP BY property_id
+        ) favourites ON properties.property_id = favourites.property_id
+        LEFT JOIN (
+            SELECT property_id, AVG(rating) AS avg_rating
+            FROM reviews
+            GROUP BY property_id
+        ) reviews ON properties.property_id = reviews.property_id
         ORDER BY ${sort} ${order}, properties.property_id ASC;`
     );
 
