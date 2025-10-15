@@ -3,6 +3,7 @@ const app = require("../app.js");
 const db = require("../db/connection.js");
 const seed = require("../db/seed.js");
 const { propertyTypesData, usersData, propertiesData, reviewsData, imagesData, favouritesData, bookingsData } = require("../db/data/dev/index.js");
+const convertPriceToNumber  = require("../db/utility-functions/convertPriceToNumber.js");
 
 
 beforeEach( async ()=>{
@@ -77,12 +78,9 @@ describe("app", () => {
         describe("sort queries", ()=>{
             test("price_per_night - properties ordered by price (high to low); tied are ordered by id", async () => {
                 const { body } = await request(app).get("/api/properties?sort=price_per_night");
-                 const pricePerNightToInt = body.properties.map((property) => ({
-                    ...property, 
-                    price_per_night: Number(property.price_per_night)
-                }));
+                const convertedPropertyPrices = convertPriceToNumber(body.properties);
 
-                expect(pricePerNightToInt).toBeSortedBy("price_per_night", {descending: true});
+                expect(convertedPropertyPrices).toBeSortedBy("price_per_night", {descending: true});
             });
             test("popularity - properties ordered by rating (high to low); tied are ordered by id", async () => {
                 const { body } = await request(app).get("/api/properties?sort=popularity");
@@ -188,25 +186,18 @@ describe("app", () => {
         describe("limit by price query", ()=>{
             test("maxprice: should return all properties with a price_per_night less than or equal to maxprice value", async ()=>{
                 const { body } = await request(app).get("/api/properties?maxprice=200");
+                const convertedPropertyPrices = convertPriceToNumber(body.properties);
 
-                const pricePerNightToInt = body.properties.map((property) => ({
-                    ...property, 
-                    price_per_night: Number(property.price_per_night)
-                }));
-
-                pricePerNightToInt.forEach((property)=>{
+                convertedPropertyPrices.forEach((property)=>{
                     expect(property.price_per_night).toBeLessThanOrEqual(200);
                 });
             })
         })
         test("combined query: returns properties in asc order by price per night; tied are ordered by id", async ()=>{
                 const { body } = await request(app).get("/api/properties?sort=price_per_night&order=asc");
-                const pricePerNightToInt = body.properties.map((property) => ({
-                    ...property, 
-                    price_per_night: Number(property.price_per_night)
-                }));
+                const convertedPropertyPrices = convertPriceToNumber(body.properties);
 
-                expect(pricePerNightToInt).toBeSortedBy("price_per_night");
+                expect(convertedPropertyPrices).toBeSortedBy("price_per_night");
             });
     });
 
