@@ -1,9 +1,10 @@
 const db = require("../db/connection.js");
 
-exports.fetchProperties = async (sort="favourites", order="desc") => {
+exports.fetchProperties = async (sort="favourites", order="desc", maxprice=null) => {
 
     const allowedSortQueries = ["popularity", "price_per_night", "favourites"];
     const allowedOrderQueries = ["asc", "desc"];
+    const queryValues = [maxprice];
     
     if (!allowedSortQueries.includes(sort.toLowerCase())) {
         return Promise.reject({status: 400, msg: "Invalid sort query"});
@@ -25,17 +26,23 @@ exports.fetchProperties = async (sort="favourites", order="desc") => {
         FROM properties 
         JOIN users 
             ON properties.host_id = users.user_id
-        LEFT JOIN (
-            SELECT property_id, COUNT(*) AS favourites_count
+        LEFT OUTER JOIN (
+            SELECT 
+                property_id, 
+                COUNT(*) AS favourites_count
             FROM favourites
             GROUP BY property_id
         ) favourites ON properties.property_id = favourites.property_id
-        LEFT JOIN (
-            SELECT property_id, AVG(rating) AS avg_rating
+        LEFT OUTER JOIN (
+            SELECT 
+                property_id, 
+                AVG(rating) AS avg_rating
             FROM reviews
             GROUP BY property_id
         ) reviews ON properties.property_id = reviews.property_id
-        ORDER BY ${sort} ${order}, properties.property_id ASC;`
+        WHERE 
+            ($1::numeric IS NULL OR properties.price_per_night <= $1::numeric)
+        ORDER BY ${sort} ${order}, properties.property_id ASC;`, queryValues
     );
 
     return properties
