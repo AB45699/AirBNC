@@ -191,7 +191,15 @@ describe("app", () => {
                 convertedPropertyPrices.forEach((property)=>{
                     expect(property.price_per_night).toBeLessThanOrEqual(200);
                 });
-            })
+            });
+            test("minprice: should return all properties with a price_per_night more than or equal to minprice value", async ()=>{
+                const { body } = await request(app).get("/api/properties?minprice=250");
+                const convertedPropertyPrices = convertPriceToNumber(body.properties);
+
+                convertedPropertyPrices.forEach((property)=>{
+                    expect(property.price_per_night).toBeGreaterThanOrEqual(250);
+                });
+            });
         })
         test("combined query: returns properties in asc order by price per night; tied are ordered by id", async ()=>{
                 const { body } = await request(app).get("/api/properties?sort=price_per_night&order=asc");
