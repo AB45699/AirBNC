@@ -1,10 +1,20 @@
 const { checkUserExists } = require("../models/checkUserExists");
-const { fetchProperties, fetchProperty } = require("../models/properties")
+const { fetchProperties, fetchProperty } = require("../models/properties");
+const checkIfNumber = require("../db/utility-functions/checkIfNumber.js");
 
 exports.getProperties = async (req, res, next) => {
     const { sort, order, maxprice, minprice } = req.query; 
+ 
+    if (maxprice && !(checkIfNumber(maxprice))) {
+        return Promise.reject({status: 400, msg: "Bad request"})  
+    };
+
+    if (minprice && !(checkIfNumber(minprice))) {
+        return Promise.reject({status: 400, msg: "Bad request"})  
+    };
+
     const properties = await fetchProperties(sort, order, maxprice, minprice);
-    
+
     res.status(200).send({ properties });
 };
 
