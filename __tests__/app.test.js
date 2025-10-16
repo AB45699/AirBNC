@@ -224,7 +224,34 @@ describe("app", () => {
                     expect(body.msg).toBe("Bad request");
                 });
             });
-        })
+        });
+        describe("property type query", ()=>{
+            const expectedApartmentOrder = [
+                "Luxury Penthouse with View", 
+                "Elegant City Apartment", 
+                "Modern Apartment in City Center", 
+                "Cosy Loft in the Heart of the City",
+            ];
+            const expectedVillaOrder = [
+                "Seafront Villa with Infinity Pool", 
+                "Lakeside Luxury Villa"
+            ]; 
+            const expectedLoftOrder = [
+                "Stylish Loft in Shoreditch", 
+                "Urban Loft with Modern Amenities"
+            ]
+            test.each([
+                ["Apartment", expectedApartmentOrder],
+                ["Villa", expectedVillaOrder],
+                ["Loft", expectedLoftOrder]
+            ])("property type query %s as the parameter returns the correct properties, desc by favourites", async (propertyType, expectedOrder) => {
+                const { body } = await request(app).get(`/api/properties?property_type=${propertyType}`);
+                
+                expectedOrder.forEach((expectedProperty, index) => {
+                    expect(body.properties[index].property_name).toBe(expectedProperty);
+                });
+            });
+                })
         test("combined query: returns properties in asc order by price per night; tied are ordered by id", async ()=>{
             const { body } = await request(app).get("/api/properties?sort=price_per_night&order=asc");
             const convertedPropertyPrices = convertPriceToNumber(body.properties);

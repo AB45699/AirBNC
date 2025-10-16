@@ -1,18 +1,20 @@
 const db = require("../db/connection.js");
 
-exports.fetchProperties = async (sort="favourites", order="desc", maxprice=null, minprice=null) => {
+exports.fetchProperties = async (sort="favourites", order="desc", maxprice=null, minprice=null, propertyType=null) => {
 
     const allowedSortQueries = ["popularity", "price_per_night", "favourites"];
     const allowedOrderQueries = ["asc", "desc"];
-    const queryValues = [maxprice, minprice];
+    const queryValues = [maxprice, minprice, propertyType];
     
     if (!allowedSortQueries.includes(sort.toLowerCase())) {
         return Promise.reject({status: 400, msg: "Invalid sort query"});
-    } 
+    };
 
     if (!allowedOrderQueries.includes(order.toLowerCase())) {
         return Promise.reject({status: 400, msg: "Invalid order query"});
-    }
+    };
+
+    
 
     const { rows: properties } = await db.query(
         `SELECT 
@@ -42,10 +44,11 @@ exports.fetchProperties = async (sort="favourites", order="desc", maxprice=null,
         ) reviews ON properties.property_id = reviews.property_id
         WHERE 
             ($1::numeric IS NULL OR properties.price_per_night <= $1::numeric) AND
-            ($2::numeric IS NULL OR properties.price_per_night >= $2::numeric) 
+            ($2::numeric IS NULL OR properties.price_per_night >= $2::numeric) AND
+            ($3::text IS NULL OR properties.property_type = $3::text)
         ORDER BY ${sort} ${order}, properties.property_id ASC;`, queryValues
     );
-
+    
     return properties
 };
 
