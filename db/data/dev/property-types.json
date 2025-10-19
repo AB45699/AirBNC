@@ -38,5 +38,9 @@
   {
     "property_type": "Castle",
     "description": "A large, fortified building with towers and walls, often with a historical or medieval style."
+  },
+  {
+    "property_type": "Bungalow", 
+    "description": "test property type description"
   }
 ]
