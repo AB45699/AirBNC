@@ -1,4 +1,4 @@
-const checkIfNumber = require("../utility-functions/checkIfNumber.js");
+const checkIfNumber = require("./checkIfNumber.js");
 
 describe("checkIfNumber", ()=>{
     test("returns a boolean value", ()=>{

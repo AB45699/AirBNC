@@ -1,4 +1,4 @@
-const convertPriceToNumber = require("../utility-functions/convertPriceToNumber.js");
+const convertPriceToNumber = require("./convertPriceToNumber.js");
 
 let inputs; 
 
