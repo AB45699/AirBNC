@@ -5,7 +5,7 @@ exports.handlePathNotFound = (req, res, next) => {
 
 exports.handleBadRequests = (err, req, res, next) => {
     const codes = ["22P02", "23502", "23514"];
-
+    
     if (codes.includes(err.code)) {
         res.status(400).send({msg: "Bad request"});
     } else {

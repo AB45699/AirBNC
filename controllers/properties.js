@@ -1,10 +1,11 @@
 const { checkUserExists } = require("../models/checkUserExists");
 const { fetchProperties, fetchProperty } = require("../models/properties");
 const checkIfNumber = require("../db/utility-functions/checkIfNumber.js");
+const {checkPropertyTypeExists} = require("../models/propertyTypes.js");
 
 exports.getProperties = async (req, res, next) => {
     const { sort, order, maxprice, minprice, property_type } = req.query; 
-    console.log(property_type);
+    
     if (maxprice && !(checkIfNumber(maxprice))) {
         return Promise.reject({status: 400, msg: "Bad request"})  
     };
@@ -13,8 +14,12 @@ exports.getProperties = async (req, res, next) => {
         return Promise.reject({status: 400, msg: "Bad request"})  
     };
 
+    if (property_type) {
+        await checkPropertyTypeExists(property_type);
+    };
+
     const properties = await fetchProperties(sort, order, maxprice, minprice, property_type);
-    console.log(properties);
+
     res.status(200).send({ properties });
 };
 

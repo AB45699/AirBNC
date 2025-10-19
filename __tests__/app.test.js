@@ -251,7 +251,17 @@ describe("app", () => {
                     expect(body.properties[index].property_name).toBe(expectedProperty);
                 });
             });
-                })
+            test("responds with 200 and an empty array for a property type with zero properties", async ()=>{
+                const { body } = await request(app).get("/api/properties?property_type=Bungalow").expect(200);
+
+                expect(body.properties).toEqual([]);
+            });
+            test("responds with a 404 for a non-existent property type", async ()=>{
+                const { body } = await request(app).get("/api/properties?property_type=non-existent").expect(404);
+
+                expect(body.msg).toBe("Property type not found");
+            });
+        });
         test("combined query: returns properties in asc order by price per night; tied are ordered by id", async ()=>{
             const { body } = await request(app).get("/api/properties?sort=price_per_night&order=asc");
             const convertedPropertyPrices = convertPriceToNumber(body.properties);
@@ -263,11 +273,12 @@ describe("app", () => {
             const convertedPropertyPrices = convertPriceToNumber(body.properties);
            
             expect(convertedPropertyPrices).toBeSortedBy("price_per_night");
-
+            console.log(body.properties);
             convertedPropertyPrices.forEach((property)=>{
                 expect(property.price_per_night).toBeGreaterThanOrEqual(300);
             });
-        })
+        });
+
     });
 
 
