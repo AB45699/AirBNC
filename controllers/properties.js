@@ -19,7 +19,7 @@ exports.getProperties = async (req, res, next) => {
     };
 
     const properties = await fetchProperties(sort, order, maxprice, minprice, property_type);
-
+    
     res.status(200).send({ properties });
 };
 
