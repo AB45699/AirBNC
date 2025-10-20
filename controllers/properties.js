@@ -6,11 +6,7 @@ const {checkPropertyTypeExists} = require("../models/propertyTypes.js");
 exports.getProperties = async (req, res, next) => {
     const { sort, order, maxprice, minprice, property_type } = req.query; 
     
-    if (maxprice && !(checkIfNumber(maxprice))) {
-        return Promise.reject({status: 400, msg: "Bad request"})  
-    };
-
-    if (minprice && !(checkIfNumber(minprice))) {
+    if (maxprice && !(checkIfNumber(maxprice)) || minprice && !(checkIfNumber(minprice))) {
         return Promise.reject({status: 400, msg: "Bad request"})  
     };
 
