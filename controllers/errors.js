@@ -5,7 +5,7 @@ exports.handlePathNotFound = (req, res, next) => {
 
 exports.handleDataBaseErrors = (err, req, res, next) => {
     const codes = ["22P02", "23502", "23514"];
-
+    
     if (err.code === "23503") {
         const item = err.constraint === "reviews_property_id_fkey" ? "Property" : "Guest";
         res.status(404).send({msg: `${item} not found`});

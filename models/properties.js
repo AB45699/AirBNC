@@ -2,19 +2,22 @@ const db = require("../db/connection.js");
 
 exports.fetchProperties = async (sort="favourites", order="desc", maxprice=null, minprice=null, propertyType=null) => {
 
-    const allowedSortQueries = ["popularity", "price_per_night", "favourites"];
     const allowedOrderQueries = ["asc", "desc"];
     const queryValues = [maxprice, minprice, propertyType];
-    
-    if (!allowedSortQueries.includes(sort.toLowerCase())) {
-        return Promise.reject({status: 400, msg: "Invalid sort query"});
+
+    const allowedSortQueries = {
+        "favourites": "COALESCE(favourites_count, 0)",
+        "price_per_night": "properties.price_per_night", 
+        "popularity": "COALESCE(avg_rating, 0)"
     };
 
+    if (!(allowedSortQueries[sort.toLowerCase()])) {
+        return Promise.reject({status: 400, msg: "Invalid sort query"});
+    }; 
+    
     if (!allowedOrderQueries.includes(order.toLowerCase())) {
         return Promise.reject({status: 400, msg: "Invalid order query"});
     };
-
-    
 
     const { rows: properties } = await db.query(
         `SELECT 
@@ -22,9 +25,7 @@ exports.fetchProperties = async (sort="favourites", order="desc", maxprice=null,
             properties.name AS property_name,
             properties.location,
             properties.price_per_night,
-            CONCAT(users.first_name, ' ', users.surname) AS host,
-            COALESCE(favourites_count, 0) AS favourites,
-            COALESCE(avg_rating, 0) AS popularity
+            CONCAT(users.first_name, ' ', users.surname) AS host
         FROM properties 
         JOIN users 
             ON properties.host_id = users.user_id
@@ -46,13 +47,13 @@ exports.fetchProperties = async (sort="favourites", order="desc", maxprice=null,
             ($1::numeric IS NULL OR properties.price_per_night <= $1::numeric) AND
             ($2::numeric IS NULL OR properties.price_per_night >= $2::numeric) AND
             ($3::text IS NULL OR properties.property_type = $3::text)
-        ORDER BY ${sort} ${order}, properties.property_id ASC;`, queryValues
+        ORDER BY ${allowedSortQueries[sort]} ${order}, properties.property_id ASC;`, queryValues
     );
     
     return properties
 };
 
-exports.fetchProperty= async (id, user_id) => {
+exports.fetchProperty = async (id, user_id) => {
     let queryValues = [id];
 
     let selectQuery = `
@@ -118,7 +119,7 @@ exports.fetchProperty= async (id, user_id) => {
     const {
         rows: [property]
     } = await db.query(finalQuery, queryValues);
-    
+  
     return property
 };
 

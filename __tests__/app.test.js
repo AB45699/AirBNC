@@ -193,8 +193,8 @@ describe("app", () => {
                         expect(property.price_per_night).toBeLessThanOrEqual(200);
                     });
                 });
-                test("returns an empty array if no properties are available with the condition", async () => {
-                    const { body } = await request(app).get("/api/properties?maxprice=0");
+                test("returns 200 and an empty array if no properties are available with the condition", async () => {
+                    const { body } = await request(app).get("/api/properties?maxprice=0").expect(200);
 
                     expect(body.properties).toEqual([]);
                 });
@@ -213,8 +213,8 @@ describe("app", () => {
                         expect(property.price_per_night).toBeGreaterThanOrEqual(250);
                     });
                 });
-                test("returns an empty array if no properties are available with the condition", async () => {
-                    const { body } = await request(app).get("/api/properties?minprice=20000");
+                test("returns 200 and an empty array if no properties are available with the condition", async () => {
+                    const { body } = await request(app).get("/api/properties?minprice=20000").expect(200);
 
                     expect(body.properties).toEqual([]);
                 });
@@ -273,7 +273,7 @@ describe("app", () => {
             const convertedPropertyPrices = convertPriceToNumber(body.properties);
            
             expect(convertedPropertyPrices).toBeSortedBy("price_per_night");
-            console.log(body.properties);
+            
             convertedPropertyPrices.forEach((property)=>{
                 expect(property.price_per_night).toBeGreaterThanOrEqual(300);
             });
