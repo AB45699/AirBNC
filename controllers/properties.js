@@ -23,7 +23,7 @@ exports.getPropertyById = async (req, res, next) => {
     const { id } = req.params;
     const { user_id } = req.query;
 
-    if (!checkIfNumber(id)) {
+    if (!checkIfNumber(id) || user_id && !checkIfNumber(user_id)) {
         return Promise.reject({status: 400, msg: "Bad request"});
     }
 
