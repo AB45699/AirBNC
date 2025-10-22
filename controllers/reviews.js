@@ -2,14 +2,22 @@ const { checkPropertyExists } = require("../models/checkPropertyExists.js");
 const {insertPropertyReview, fetchPropertyReviews, deletePropertyReview} = require("../models/reviews.js"); 
 const getAverageRating = require("../db/utility-functions/getAverageRating.js");
 const { checkReviewExists } = require("../models/checkReviewExists.js");
+const checkIfNumber = require("../db/utility-functions/checkIfNumber.js");
 
 exports.postPropertyReview = async (req, res, next) => {
     const { guest_id, rating, comment } = req.body;
     const { id } = req.params;
     
-    if (comment && typeof comment !== "string") {
-       return Promise.reject({status: 400, msg: "Bad request"});
-    };
+    const invalidId = !checkIfNumber(id);
+    const invalidGuestId = !checkIfNumber(guest_id);
+    const invalidRating = !checkIfNumber(rating) || rating > 5 || rating < 1;
+    const invalidComment = comment && typeof comment !== "string";
+
+    if (guest_id === undefined || rating === undefined ||
+        invalidId || invalidGuestId || invalidRating ||
+        invalidComment) {
+        return Promise.reject({ status: 400, msg: "Bad request" });
+    }
 
     const propertyReview = await insertPropertyReview(guest_id, rating, comment, id);
     

@@ -433,12 +433,12 @@ describe("app", () => {
         [6, 400, "Bad request"],
         [0, 400, "Bad request"],
         [1, 201, undefined]
-    ])("rating >= 1 or <=5: %i  returns the correct status code '%s' and message '%s'", async (rating, status, message) => {
+        ])("rating >= 1 or <=5: %i  returns the correct status code '%s' and message '%s'", async (rating, status, message) => {
         const testReview = { guest_id: 5, rating: rating, comment: "test review" };
         const { body } = await request(app).post("/api/properties/4/reviews").send(testReview).expect(status);
         
         expect(body.msg).toBe(message);
-    });
+        });
         test("responds with a 400 and error message if comment is not a string", async ()=>{
             const testReview = { guest_id: 5, rating: 5, comment: 123 };
             const { body } = await request(app).post("/api/properties/4/reviews").send(testReview).expect(400);
