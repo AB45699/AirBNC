@@ -27,13 +27,16 @@ exports.postPropertyReview = async (req, res, next) => {
 exports.getPropertyReviews = async (req, res, next) => {
     const { id } = req.params;
 
-    if (id) {
-        const property = await checkPropertyExists(id);
-        if (property === undefined) {
-            return Promise.reject({status: 404, msg: "Property not found"});
-        }
+    if (!checkIfNumber(id)) {
+        return Promise.reject({status: 400, msg: "Bad request"});
     };
 
+    const property = await checkPropertyExists(id);
+
+    if (property === undefined) {
+        return Promise.reject({status: 404, msg: "Property not found"});
+    };
+    
     const reviews = await fetchPropertyReviews(id);
     const averageRating = getAverageRating(reviews);
     
@@ -46,11 +49,15 @@ exports.getPropertyReviews = async (req, res, next) => {
 exports.deletePropertyReview = async (req, res, next) => {
     const { id } = req.params;
     
-    if (await checkReviewExists(id) === undefined) {
+    if (!checkIfNumber(id)) {
+        return Promise.reject({status: 400, msg: "Bad request"});
+    };
+
+    const deletedReview = await deletePropertyReview(id);
+
+    if (deletedReview.length === 0) {
         return Promise.reject({status: 404, msg: "Review not found"});
-    }
-
-    await deletePropertyReview(id);
-
+    };
+    
     res.sendStatus(204);
 };

@@ -31,7 +31,8 @@ exports.fetchPropertyReviews = async (id) => {
 exports.deletePropertyReview = async (id) =>{
     const { rows: deletedReview } = await db.query(
         `DELETE FROM reviews
-        WHERE review_id = $1;`, [id]
+        WHERE review_id = $1
+        RETURNING review_id;`, [id]
     );
 
     return deletedReview;
