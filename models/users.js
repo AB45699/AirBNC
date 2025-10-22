@@ -13,6 +13,6 @@ exports.fetchUserDetails = async (id) => {
         FROM users
         WHERE user_id = $1;`, [id]
     );
-
+    
     return user;
 }
