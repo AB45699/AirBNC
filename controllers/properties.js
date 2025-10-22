@@ -33,7 +33,7 @@ exports.getPropertyById = async (req, res, next) => {
 
     const property = await fetchProperty(id, user_id);
     
-    if (property === undefined) {
+    if (!property) {
         return Promise.reject({status: 404, msg: "Property not found"}); 
     };
 

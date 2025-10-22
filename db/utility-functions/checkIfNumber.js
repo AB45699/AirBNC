@@ -1,6 +1,6 @@
-function checkIfNumber(stringNumber) {
-    if (typeof stringNumber === "string") {
-        if (isFinite(stringNumber)) {
+function checkIfNumber(value) {
+    if (typeof value === "string" || typeof value === "number") {
+        if (isFinite(value)) {
             return true
         }
     }

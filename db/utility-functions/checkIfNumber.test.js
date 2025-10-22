@@ -9,7 +9,10 @@ describe("checkIfNumber", ()=>{
         expect(checkIfNumber("invalid")).toBe(false);
     });
     test("returns false if the input is not a string", ()=>{
-        expect(checkIfNumber(123)).toBe(false);
+        expect(checkIfNumber([123])).toBe(false);
+    });
+    test("returns true if the input is of type integer", ()=>{
+        expect(checkIfNumber(123)).toBe(true);
     })
     test("returns true if the input string is a valid number", ()=>{
         expect(checkIfNumber("123")).toBe(true);
