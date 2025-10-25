@@ -1,8 +1,9 @@
 const db = require("../db/connection.js");
+const capitaliseFirstLetter = require("../db/utility-functions/capitaliseFirstLetter.js");
 
 exports.fetchProperties = async (sort="favourites", order="desc", maxprice=null, minprice=null, propertyType=null) => {
     const allowedOrderQueries = ["asc", "desc"];
-    const queryValues = [maxprice, minprice, propertyType];
+    const queryValues = [maxprice, minprice, capitaliseFirstLetter(propertyType)];
 
     const allowedSortQueries = {
         "favourites": "COALESCE(favourites_count, 0)",

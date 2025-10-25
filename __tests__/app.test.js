@@ -118,7 +118,7 @@ describe("app", () => {
         test("sort queries are case insensitive", async ()=>{
           await request(app).get("/api/properties?sort=PrIcE_peR_nIGht").expect(200);
           await request(app).get("/api/properties?sort=pOPULariTY").expect(200);
-        })
+        });
       });
       describe("order queries", () => {
         test("ascending (asc) - properties are returned by favourities (low to high); tied are ordered by id", async () => {
@@ -183,6 +183,10 @@ describe("app", () => {
           const { body } = await request(app).get("/api/properties?order=invalid").expect(400);
 
           expect(body.msg).toBe("Invalid order query");
+        });
+        test("order queries are case insensitive", async ()=>{
+          await request(app).get("/api/properties?order=AsC").expect(200);
+          await request(app).get("/api/properties?order=dESC").expect(200);
         });
       });
       describe("limit by price query", () => {
@@ -265,6 +269,10 @@ describe("app", () => {
           const { body } = await request(app).get("/api/properties?property_type=non-existent").expect(404);
 
           expect(body.msg).toBe("Property type not found");
+        });
+        test.only("property type queries are case insensitive", async ()=>{
+          await request(app).get("/api/properties?property_type=aParTmeNt").expect(200);
+          await request(app).get("/api/properties?property_type=vILla").expect(200);
         });
       });
       describe("combined queries", () => {
