@@ -46,7 +46,7 @@ exports.fetchProperties = async (sort="favourites", order="desc", maxprice=null,
             ($1::numeric IS NULL OR properties.price_per_night <= $1::numeric) AND
             ($2::numeric IS NULL OR properties.price_per_night >= $2::numeric) AND
             ($3::text IS NULL OR properties.property_type = $3::text)
-        ORDER BY ${allowedSortQueries[sort]} ${order}, properties.property_id ASC;`, queryValues
+        ORDER BY ${allowedSortQueries[sort.toLowerCase()]} ${order}, properties.property_id ASC;`, queryValues
     );
     
     return properties;
