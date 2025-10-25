@@ -8,14 +8,14 @@ describe("checkIfNumber", ()=>{
         expect(checkIfNumber("12AB3")).toBe(false);
         expect(checkIfNumber("invalid")).toBe(false);
     });
-    test("returns false if the input is not a string", ()=>{
+    test("returns true if the input string is a valid number", ()=>{
+        expect(checkIfNumber("123")).toBe(true);
+    });
+    test("returns false if the input is not a string nor integer", ()=>{
         expect(checkIfNumber([123])).toBe(false);
     });
     test("returns true if the input is of type integer", ()=>{
         expect(checkIfNumber(123)).toBe(true);
-    })
-    test("returns true if the input string is a valid number", ()=>{
-        expect(checkIfNumber("123")).toBe(true);
     });
     test("returns false for null or undefined input", ()=>{
         expect(checkIfNumber(null)).toBe(false);
