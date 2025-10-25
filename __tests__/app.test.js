@@ -267,10 +267,10 @@ describe("app", () => {
         });
         test("404: non-existent property type", async () => {
           const { body } = await request(app).get("/api/properties?property_type=non-existent").expect(404);
-
+          
           expect(body.msg).toBe("Property type not found");
         });
-        test.only("property type queries are case insensitive", async ()=>{
+        test("property type queries are case insensitive", async ()=>{
           await request(app).get("/api/properties?property_type=aParTmeNt").expect(200);
           await request(app).get("/api/properties?property_type=vILla").expect(200);
         });
@@ -304,6 +304,11 @@ describe("app", () => {
             expect(property.property_name).toBe(expectedOrder[index]);
           });
         });
+        test("for min and maxprice queries that have an invalid range, an empty array is returned", async ()=>{
+          const { body } = await request(app).get("/api/properties?minprice=200&maxprice=100");
+
+          expect(body.properties).toEqual([]);
+        })
       });
     });
   });
