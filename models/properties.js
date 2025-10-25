@@ -1,7 +1,6 @@
 const db = require("../db/connection.js");
 
 exports.fetchProperties = async (sort="favourites", order="desc", maxprice=null, minprice=null, propertyType=null) => {
-
     const allowedOrderQueries = ["asc", "desc"];
     const queryValues = [maxprice, minprice, propertyType];
 
@@ -11,7 +10,7 @@ exports.fetchProperties = async (sort="favourites", order="desc", maxprice=null,
         "popularity": "COALESCE(avg_rating, 0)"
     };
 
-    if (!(allowedSortQueries[sort.toLowerCase()])) {
+    if ((allowedSortQueries[sort.toLowerCase()]) === undefined) {
         return Promise.reject({status: 400, msg: "Invalid sort query"});
     }; 
     
@@ -50,7 +49,7 @@ exports.fetchProperties = async (sort="favourites", order="desc", maxprice=null,
         ORDER BY ${allowedSortQueries[sort]} ${order}, properties.property_id ASC;`, queryValues
     );
     
-    return properties
+    return properties;
 };
 
 exports.fetchProperty = async (id, user_id) => {
@@ -115,12 +114,12 @@ exports.fetchProperty = async (id, user_id) => {
         WHERE properties.property_id = $1
         ${groupByQuery};
     `;
-
+    
     const {
         rows: [property]
     } = await db.query(finalQuery, queryValues);
-  
-    return property
+    
+    return property;
 };
 
 
