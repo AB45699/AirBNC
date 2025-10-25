@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test-utils": "jest utility",
+    "test-inserts": "jest insert",
     "test": "jest app",
     "create-db": "psql -f ./db/create-database.sql",
     "seed": "node ./db/seed-run.js"

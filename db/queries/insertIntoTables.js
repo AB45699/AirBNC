@@ -4,6 +4,7 @@ const { createUsersRef } = require("../utility-functions/createUsersRefs.js");
 const { createPropertiesRef } = require("../utility-functions/createPropertiesRef.js");
 const insertPropertyTypes = require("./insert-functions/insertPropertyTypes.js");
 const insertUsers = require("./insert-functions/insertUsers.js");
+const insertProperties = require("./insert-functions/insertProperties.js");
 
 async function insertIntoTables(propertyTypes, users, properties, reviews, images, favourites, bookings) {
     
@@ -24,15 +25,7 @@ async function insertIntoTables(propertyTypes, users, properties, reviews, image
     const {rows: insertedProperties } = await db.query(
         format(
             `INSERT INTO properties (host_id, name, location, property_type, price_per_night, description) VALUES %L RETURNING name, property_id;`, 
-            properties.map(({ name, property_type, location, price_per_night, description, host_name }) => 
-                [
-                    usersRefs[host_name],
-                    name, 
-                    location, 
-                    property_type,
-                    price_per_night, 
-                    description
-                ])
+            insertProperties(usersRefs, properties)
         ) 
     );
 
