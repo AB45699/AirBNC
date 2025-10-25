@@ -3,7 +3,8 @@ const capitaliseFirstLetter = require("../db/utility-functions/capitaliseFirstLe
 
 exports.fetchProperties = async (sort="favourites", order="desc", maxprice=null, minprice=null, propertyType=null) => {
     const allowedOrderQueries = ["asc", "desc"];
-    const queryValues = [maxprice, minprice, capitaliseFirstLetter(propertyType)];
+    const capitalisedPropertyType = propertyType && (capitaliseFirstLetter(propertyType));
+    const queryValues = [maxprice, minprice, capitalisedPropertyType];
 
     const allowedSortQueries = {
         "favourites": "COALESCE(favourites_count, 0)",
