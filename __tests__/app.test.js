@@ -115,6 +115,10 @@ describe("app", () => {
 
           expect(body.msg).toBe("Invalid sort query");
         });
+        test("sort queries are case insensitive", async ()=>{
+          await request(app).get("/api/properties?sort=PrIcE_peR_nIGht").expect(200);
+          await request(app).get("/api/properties?sort=pOPULariTY").expect(200);
+        })
       });
       describe("order queries", () => {
         test("ascending (asc) - properties are returned by favourities (low to high); tied are ordered by id", async () => {
