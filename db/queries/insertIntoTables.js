@@ -6,6 +6,7 @@ const insertPropertyTypes = require("./insert-functions/insertPropertyTypes.js")
 const insertUsers = require("./insert-functions/insertUsers.js");
 const insertReviews = require("./insert-functions/insertReviews.js");
 const insertProperties = require("./insert-functions/insertProperties.js");
+const insertImages = require("./insert-functions/insertImages.js");
 
 async function insertIntoTables(propertyTypes, users, properties, reviews, images, favourites, bookings) {
     
@@ -42,11 +43,7 @@ async function insertIntoTables(propertyTypes, users, properties, reviews, image
     await db.query(
         format(
             `INSERT INTO images (property_id, image_url, alt_text) VALUES %L;`, 
-            images.map(({ property_name, image_url, alt_tag}) => [
-                propertiesRefs[property_name], 
-                image_url, 
-                alt_tag
-            ])
+            insertImages(propertiesRefs, images)
         )
     );
 
