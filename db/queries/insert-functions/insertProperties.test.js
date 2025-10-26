@@ -39,9 +39,10 @@ describe("insertProperties", ()=>{
     test("host id is taken from the userRef object, for two hosts", ()=>{
         const testUserRef = {"Alice Johnson": 1, "Emma Davis": 2};
         const testPropertyData = [{host_name: "Alice Johnson"}, {host_name: "Emma Davis"}];
+        const output = (insertProperties(testUserRef, testPropertyData));
 
-        expect((insertProperties(testUserRef, testPropertyData))[0][0]).toEqual(1);
-        expect((insertProperties(testUserRef, testPropertyData))[1][0]).toEqual(2);
+        expect(output[0][0]).toEqual(1);
+        expect(output[1][0]).toEqual(2);
     }); 
     test("all other values of propertyData are returned unchanged", ()=>{
         const testUserRef = {"Alice Johnson": 1, "Emma Davis": 2};
@@ -65,6 +66,48 @@ describe("insertProperties", ()=>{
                 "Stylish apartment located in the heart of Birmingham, close to all attractions."
             ]
         ]);
+    });
+    test("the inputed array is not mutated", ()=>{
+        const testUserRef = {"Alice Johnson": 1, "Emma Davis": 2};
+        const testInput = inputs;
 
+        insertProperties(testUserRef, testInput)
+
+        expect(testInput).toEqual([
+            {
+                "name": "Modern Apartment in City Center",
+                "property_type": "Apartment",
+                "location": "London, UK",
+                "price_per_night": 120.0,
+                "description": "Description of Modern Apartment in City Center. A sleek apartment with all modern amenities.",
+                "host_name": "Alice Johnson",
+                "amenities": ["WiFi", "TV", "Kitchen", "Washing Machine"]
+            },
+            {
+                "name": "Elegant City Apartment",
+                "property_type": "Apartment",
+                "location": "Birmingham, UK",
+                "price_per_night": 110.0,
+                "description": "Stylish apartment located in the heart of Birmingham, close to all attractions.",
+                "host_name": "Emma Davis",
+                "amenities": ["WiFi", "TV", "Kitchen", "Washing Machine", "Iron"]
+            }
+        ]);
+    });
+    test("the inputed object is not mutated", ()=>{
+        const testUserRef = {"Alice Johnson": 1, "Emma Davis": 2};
+        const testInput = inputs;
+
+        insertProperties(testUserRef, testInput)
+
+        expect(testUserRef).toEqual({"Alice Johnson": 1, "Emma Davis": 2});
+    });
+     test("the output array is a new array", ()=>{
+        const testUserRef = {"Alice Johnson": 1, "Emma Davis": 2};
+        const testInput = inputs;
+
+        const output = insertProperties(testUserRef, testInput)
+
+        expect(testInput).not.toBe(output);
     });
 })
