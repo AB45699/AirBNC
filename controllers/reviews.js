@@ -33,13 +33,14 @@ exports.getPropertyReviews = async (req, res, next) => {
         return Promise.reject({status: 400, msg: "Bad request"});
     };
 
-    const property = await checkPropertyExists(id);
+    const promises = [fetchPropertyReviews(id), checkPropertyExists(id)];
+
+    const [reviews, property] = await Promise.all(promises);
 
     if (property === undefined) {
         return Promise.reject({status: 404, msg: "Property not found"});
     };
     
-    const reviews = await fetchPropertyReviews(id);
     const averageRating = getAverageRating(reviews);
     
     res.status(200).send({
