@@ -1,12 +1,18 @@
 const express = require("express"); 
+const path = require("path");
 const { getProperties, getPropertyById } = require("./controllers/properties");
 const { postPropertyReview, getPropertyReviews, deletePropertyReview } = require("./controllers/reviews.js");
 const { handlePathNotFound, handleDataBaseErrors, handleServerErrors, handleCustomErrors } = require("./controllers/errors");
 const { getUserDetails } = require("./controllers/users.js");
+const { getView } = require("./controllers/view.js");
 
 const app = express(); 
 
 app.use(express.json()); 
+
+app.use(express.static(path.join(__dirname, 'public')));
+
+app.get("/", getView);
 
 app.get("/api/properties", getProperties);
 

@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AirBNC - Documentation</title>
+</head>
+<body>
+    <h1>Welcome, see the available endpoints below:</h1>
+
+    <section>
+        <h2>Information</h2>
+        <p>Visitors to this site can view property information and post and delete property reviews through the HTTP GET, POST and DELETE methods respectively.</p>
+        
+        <h3>Properties (group)</h3>
+
+        <h4>properties (endpoint)</h4>
+        <p>Retrieve a listing of every property available for renting. See its name, location, rent per night, and the host's name.</p>
+        <code>GET /api/properties</code>
+
+        <p>In the response all properties available on the site will be returned, default order is by number of favourites per property. Those tied, are then sub-grouped by their id:</p>
+        <code>
+            <pre>
+            {
+                properties: [
+                    {
+                        property_id: 2,
+                        property_name: 'Cosy Family House',
+                        location: 'Manchester, UK',
+                        price_per_night: '150',
+                        host: 'Alice Johnson'
+                    },
+                    {
+                        property_id: 3,
+                        property_name: 'Chic Studio Near the Beach',
+                        location: 'Brighton, UK',
+                        price_per_night: '90',
+                        host: 'Alice Johnson'
+                    },
+                    {
+                        property_id: 5,
+                        property_name: 'Charming Studio Retreat',
+                        location: 'Bristol, UK',
+                        price_per_night: '85',
+                        host: 'Emma Davis'
+                    },
+                    {
+                        property_id: 7,
+                        property_name: 'Spacious Countryside House',
+                        location: 'Yorkshire, UK',
+                        price_per_night: '200',
+                        host: 'Isabella Martinez'
+                    },
+                    {
+                        property_id: 8,
+                        property_name: 'Seaside Studio Getaway',
+                        location: 'Cornwall, UK',
+                        price_per_night: '95',
+                        host: 'Emma Davis'
+                    },...
+                ]
+            }
+            </pre>
+        </code>
+
+        <h4>properties (type)</h4>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Type</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th>property_id</th>
+                    <th>The identifier for this resource</th>
+                    <th>integer</th>
+                </tr>
+                <tr>
+                    <th>property_name</th>
+                    <th>The name of the property as entered by the host</th>
+                    <th>string</th>
+                </tr>
+                <tr>
+                    <th>location</th>
+                    <th>Where the property is located</th>
+                    <th>string</th>
+                </tr>
+                <tr>
+                    <th>price_per_night</th>
+                    <th>How much the property costs to rent per night</th>
+                    <th>integer</th>
+                </tr>
+                <tr>
+                    <th>host</th>
+                    <th>The property's owner</th>
+                    <th>string</th>
+                </tr>
+            </tbody>
+        </table>
+
+        <h4>individual property (endpoint)</h4>
+        <p>Retrieve the details for a specified property.</p>
+        <code>GET /api/properties/{id}</code>
+        <p>Note: the {id} must be an integer.</p>
+
+        <code>
+            <pre>
+                {
+                    property: {
+                            property_id: 4,
+                            property_name: 'Elegant City Apartment',
+                            location: 'Birmingham, UK',
+                            price_per_night: '110',
+                            description: 'Stylish apartment located in the heart of Birmingham, close to all attractions.',
+                            host: 'Emma Davis',
+                            host_avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+                            favourite_count: '4'
+                        }
+                    }
+            </pre>
+        </code>
+
+        
+        <h4>individual property (type)</h4>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Type</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th>property_id</th>
+                    <th>The identifier for this resource</th>
+                    <th>integer</th>
+                </tr>
+                <tr>
+                    <th>property_name</th>
+                    <th>The name of the property as entered by the host</th>
+                    <th>string</th>
+                </tr>
+                <tr>
+                    <th>location</th>
+                    <th>Where the property is located</th>
+                    <th>string</th>
+                </tr>
+                <tr>
+                    <th>price_per_night</th>
+                    <th>How much the property costs to rent per night</th>
+                    <th>integer</th>
+                </tr>
+                <tr>
+                    <th>description</th>
+                    <th>The host's description of the property, including specific amenities and features.</th>
+                    <th>string</th>
+                </tr>
+                <tr>
+                    <th>host</th>
+                    <th>The property's owner</th>
+                    <th>string</th>
+                </tr>
+                <tr>
+                    <th>host_avatar</th>
+                    <th>The property owner's profile picture</th>
+                    <th>string</th>
+                </tr>
+                <tr>
+                    <th>favourite_count</th>
+                    <th>Total number of users that have liked the property</th>
+                    <th>integer</th>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>Reviews (group)</h3>
+
+        <h4>individual property review (endpoint)</h4>
+        <p>Retrieve all reviews posted for a specified property and its overall average rating.</p>
+        <code>GET /api/properties/{id}/reviews</code>
+        <p>Note: the {id} must be an integer.</p>
+
+        <code>
+            <pre>
+            {
+                reviews: [
+                        {
+                            review_id: 10,
+                            comment: 'This quaint cottage was absolutely lovely, offering a serene and private escape in the hills. We enjoyed the cozy fireplace, scenic surroundings, and charming decor throughout. It was exactly what we needed for a relaxing weekend.',
+                            rating: 5,
+                            created_at: '2025-04-15T16:45:00.000Z',
+                            guest: 'Sophia Bennett',
+                            guest_avatar: 'https://images.unsplash.com/photo-1606335192038-f5a05f761b3a?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+                        },
+                        {
+                            review_id: 11,
+                            comment: 'test review',
+                            rating: 4,
+                            created_at: '2024-04-15T16:45:00.000Z',
+                            guest: 'Sophia Bennett',
+                            guest_avatar: 'https://images.unsplash.com/photo-1606335192038-f5a05f761b3a?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+                        }
+                    ],
+                    average_rating: 4.5
+                }
+            </pre>
+        </code>
+
+        
+        <h4>individual property review (type)</h4>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Type</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th>review_id</th>
+                    <th>The identifier for this resource</th>
+                    <th>integer</th>
+                </tr>
+                <tr>
+                    <th>comment</th>
+                    <th>The comment posted by a guest who rented the property</th>
+                    <th>string</th>
+                </tr>
+                <tr>
+                    <th>rating</th>
+                    <th>The rating given by the guest who rented the property</th>
+                    <th>integer</th>
+                </tr>
+                <tr>
+                    <th>created_at</th>
+                    <th>When the review was posted</th>
+                    <th>string</th>
+                </tr>
+                <tr>
+                    <th>guest</th>
+                    <th>Name of the guest that posted the review</th>
+                    <th>string</th>
+                </tr>
+                <tr>
+                    <th>guest_avatar</th>
+                    <th>The profile picture of the guest that posted the review</th>
+                    <th>string</th>
+                </tr>
+                <tr>
+                    <th>average_rating</th>
+                    <th>Average rating of the property calculated from total ratings posted</th>
+                    <th>integer</th>
+                </tr>
+            </tbody>
+        </table>
+
+        <h4>post property review (endpoint)</h4>
+        <p>Post a review for the specified property. At minimum a guest_id and a rating must be provided in the payload.</p>
+        <code>POST /api/properties/{id}/reviews</code>
+        <p>Note: the {id} must be an integer.</p>
+        <p>Note: a valid integer must be provided for the guest_id and rating. Ratings must be between 1 and 5 (inclusive).</p>
+
+        <p>The below is an example of a valid payload:</p>
+        <code>
+            <pre>
+                {
+                    guest_id: 5, 
+                    rating: 4
+                }
+            </pre>
+        </code>
+
+        <p>The below is an example of a valid payload with a comment:</p>
+        <p>Note: the comment must be of type string</p>
+        <code>
+            <pre>
+                {
+                    guest_id: 5, 
+                    rating: 4, 
+                    comment: "Excellent property."
+                }
+            </pre>
+        </code>
+        
+        <h4>property review payload (type)</h4>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Type</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th>guest_id</th>
+                    <th>The identifier for the guest who will be posting the review</th>
+                    <th>integer</th>
+                </tr>
+                <tr>
+                    <th>rating</th>
+                    <th>The rating to be posted in the review</th>
+                    <th>integer</th>
+                </tr>
+                <tr>
+                    <th>comment</th>
+                    <th>This is optional. The comment to be posted in the review.</th>
+                    <th>string</th>
+                </tr>
+            </tbody>
+        </table>
+
+        <p>The below is an example of what is responded with once a review is posted:</p>
+        <code>
+            <pre>
+                {
+                    review_id: 11,
+                    property_id: 4,
+                    guest_id: 5,
+                    rating: 4,
+                    comment: "Excellent property.",
+                    created_at: "2024-04-15T17:45:00Z"
+                }
+            </pre>
+        </code>
+
+         <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Type</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th>review_id</th>
+                    <th>The identifier for the new review that has been posted</th>
+                    <th>integer</th>
+                </tr>
+                <tr>
+                    <th>property_id</th>
+                    <th>The identifier for the property that has had a review posted on it</th>
+                    <th>integer</th>
+                </tr>
+                <tr>
+                    <th>guest_id</th>
+                    <th>The identifier for the guest that posted the review</th>
+                    <th>integer</th>
+                </tr>
+                <tr>
+                    <th>rating</th>
+                    <th>The rating that was posted in the review</th>
+                    <th>integer</th>
+                </tr>
+                <tr>
+                    <th>comment</th>
+                    <th>The comment that was posted in the review. This is null if no comment was provided in the payload.</th>
+                    <th>string</th>
+                </tr>
+                 <tr>
+                    <th>created_at</th>
+                    <th>The timestamp of when the review was posted</th>
+                    <th>string</th>
+                </tr>
+            </tbody>
+        </table>
+
+        <h4>individual property review (endpoint)</h4>
+        <p>Retrieve all reviews posted for a specified property and its overall average rating.</p>
+        <code>GET /api/properties/{id}/reviews</code>
+        <p>Note: the {id} must be an integer.</p>
+
+        <code>
+            <pre>
+            {
+                reviews: [
+                        {
+                            review_id: 10,
+                            comment: 'This quaint cottage was absolutely lovely, offering a serene and private escape in the hills. We enjoyed the cozy fireplace, scenic surroundings, and charming decor throughout. It was exactly what we needed for a relaxing weekend.',
+                            rating: 5,
+                            created_at: '2025-04-15T16:45:00.000Z',
+                            guest: 'Sophia Bennett',
+                            guest_avatar: 'https://images.unsplash.com/photo-1606335192038-f5a05f761b3a?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+                        },
+                        {
+                            review_id: 11,
+                            comment: 'test review',
+                            rating: 4,
+                            created_at: '2024-04-15T16:45:00.000Z',
+                            guest: 'Sophia Bennett',
+                            guest_avatar: 'https://images.unsplash.com/photo-1606335192038-f5a05f761b3a?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+                        }
+                    ],
+                    average_rating: 4.5
+                }
+            </pre>
+        </code>
+
+        
+        <h4>individual property review (type)</h4>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Type</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th>review_id</th>
+                    <th>The identifier for this resource</th>
+                    <th>integer</th>
+                </tr>
+                <tr>
+                    <th>comment</th>
+                    <th>The comment posted by a guest who rented the property</th>
+                    <th>string</th>
+                </tr>
+                <tr>
+                    <th>rating</th>
+                    <th>The rating given by the guest who rented the property</th>
+                    <th>integer</th>
+                </tr>
+                <tr>
+                    <th>created_at</th>
+                    <th>When the review was posted</th>
+                    <th>string</th>
+                </tr>
+                <tr>
+                    <th>guest</th>
+                    <th>Name of the guest that posted the review</th>
+                    <th>string</th>
+                </tr>
+                <tr>
+                    <th>guest_avatar</th>
+                    <th>The profile picture of the guest that posted the review</th>
+                    <th>string</th>
+                </tr>
+                <tr>
+                    <th>average_rating</th>
+                    <th>Average rating of the property calculated from total ratings posted</th>
+                    <th>integer</th>
+                </tr>
+            </tbody>
+        </table>
+
+        <h4>delete property review (endpoint)</h4>
+        <p>Delete a review. The review with the specified id is deleted.</p>
+        <code>DELETE /api/reviews/{id}</code>
+        <p>Note: the {id} must be an integer.</p>
+        <p>Note: no body is returned.</p>
+
+        <h3>Users (group)</h3>
+
+        <h4>user (endpoint)</h4>
+        <p>Retrieve the details of a specified user.</p>
+        <code>GET /api/users/{id}</code>
+        <p>Note: the {id} must be an integer.</p>
+
+        <code>
+            <pre>
+           {
+            user: {
+                    user_id: 4,
+                    first_name: 'Frank',
+                    surname: 'White',
+                    email: 'frank@example.com',
+                    phone_number: '+44 7000 444444',
+                    avatar: 'https://images.unsplash.com/photo-1540569014015-19a7be504e3a?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+                    created_at: '2025-11-02T15:49:27.342Z'
+                }
+            }
+            </pre>
+        </code>
+
+        <h4>user (type)</h4>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Type</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th>user_id</th>
+                    <th>The identifier for this user</th>
+                    <th>integer</th>
+                </tr>
+                <tr>
+                    <th>first_name</th>
+                    <th>The first name of the user</th>
+                    <th>string</th>
+                </tr>
+                <tr>
+                    <th>surname</th>
+                    <th>The surname of the user</th>
+                    <th>string</th>
+                </tr>
+                <tr>
+                    <th>email</th>
+                    <th>The email of the user</th>
+                    <th>string</th>
+                </tr>
+                <tr>
+                    <th>phone_number</th>
+                    <th>The phone number of the user</th>
+                    <th>string</th>
+                </tr>
+                <tr>
+                    <th>avatar</th>
+                    <th>The profile picture of the user</th>
+                    <th>string</th>
+                </tr>
+                <tr>
+                    <th>cretaed_at</th>
+                    <th>The timestamp of when the user's profile was created</th>
+                    <th>string</th>
+                </tr>
+            </tbody>
+        </table>
+
+
+    </section>
+</body>
+</html>
