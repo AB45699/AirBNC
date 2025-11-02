@@ -41,6 +41,18 @@
   },
   {
     "property_type": "Bungalow", 
-    "description": "test property type description"
+    "description": "A single-story house, often featuring a low-pitched roof and a spacious front porch, designed for easy access and comfortable living."
+  },
+  {
+  "property_type": "Townhouse",
+  "description": "A multi-floor home that shares one or more walls with adjacent properties, often found in urban areas."
+  },
+  {
+    "property_type": "Penthouse",
+    "description": "A luxurious apartment located on the top floor of a building, offering premium views and amenities."
+  },
+  {
+    "property_type": "Duplex",
+    "description": "A residential building divided into two separate units, often with their own entrances."
   }
 ]
