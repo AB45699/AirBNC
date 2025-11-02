@@ -2,7 +2,7 @@ const request = require("supertest");
 const app = require("../app.js");
 const db = require("../db/connection.js");
 const seed = require("../db/seed.js");
-const { propertyTypesData, usersData, propertiesData, reviewsData, imagesData, favouritesData, bookingsData } = require("../db/data/dev/index.js");
+const { propertyTypesData, usersData, propertiesData, reviewsData, imagesData, favouritesData, bookingsData } = require("../db/data/test/index.js");
 const pricerPerNightToInt = require("../db/utility-functions/pricePerNightToInt.js");
 
 beforeEach(async () => {

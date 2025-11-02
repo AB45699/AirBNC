@@ -7,8 +7,9 @@
     "test-utils": "jest utility",
     "test-inserts": "jest insert",
     "test": "jest app",
-    "create-db": "psql -f ./db/create-database.sql",
-    "seed": "node ./db/seed-run.js"
+    "create-dbs": "psql -f ./db/create-database.sql",
+    "seed-test": "NODE_ENV=test node ./db/seed-run.js",
+    "seed-dev": "NODE_ENV=development node ./db/seed-run.js"
   },
   "repository": {
     "type": "git",
