@@ -12,15 +12,17 @@ exports.getProperties = async (req, res, next) => {
         return Promise.reject({status: 400, msg: "Bad request"})  
     };
 
-    if (property_type) {
-        const propertyType = await checkPropertyTypeExists(property_type);
+    const propertyPromises = [fetchProperties(sort, order, maxprice, minprice, property_type)];
 
-        if (propertyType === undefined) {
-            return Promise.reject({status: 404, msg: "Property type not found"});
-        }
+    if (property_type) {
+        propertyPromises.push(checkPropertyTypeExists(property_type));
     };
 
-    const properties = await fetchProperties(sort, order, maxprice, minprice, property_type);
+    const [properties, propertyType] = await Promise.all(propertyPromises);
+
+    if (property_type && propertyType === undefined) {
+            return Promise.reject({status: 404, msg: "Property type not found"});
+    };
     
     res.status(200).send({ properties });
 };
