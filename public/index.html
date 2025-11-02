@@ -123,7 +123,6 @@
             </pre>
         </code>
 
-        
         <h4>individual property (type)</h4>
         <table>
             <thead>
@@ -177,9 +176,48 @@
             </tbody>
         </table>
 
+        <p>Note: an optional query of user_id can be provided in the endpoint. With this, an extra key of 'favourited' is returned.</p>
+        <code>GET /api/properties/{id}?user_id={user_id}</code>
+        <p>Note: the {id} must be an integer.</p>
+        
+        <code>
+            <pre>
+                {
+                    property: {
+                            property_id: 4,
+                            property_name: 'Elegant City Apartment',
+                            location: 'Birmingham, UK',
+                            price_per_night: '110',
+                            description: 'Stylish apartment located in the heart of Birmingham, close to all attractions.',
+                            host: 'Emma Davis',
+                            host_avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+                            favourite_count: '4', 
+                            favourited: true
+                        }
+                    }
+            </pre>
+        </code>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Type</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th>favourited</th>
+                    <th>True or false, depending on if the user specified has favourited the specified property</th>
+                    <th>boolean</th>
+                </tr>
+            </tbody>
+        </table>
+
         <h3>Reviews (group)</h3>
 
-        <h4>individual property review (endpoint)</h4>
+        <h4>individual property reviews (endpoint)</h4>
         <p>Retrieve all reviews posted for a specified property and its overall average rating.</p>
         <code>GET /api/properties/{id}/reviews</code>
         <p>Note: the {id} must be an integer.</p>
