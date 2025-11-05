@@ -13,3 +13,4 @@ The pool object can then read those values.
 Inside .env --> 
 ```PGDATABASE=airbnc_test``` 
 
+Link for hosted version: https://airbnc-oijh.onrender.com 
