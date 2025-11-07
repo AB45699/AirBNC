@@ -1,0 +1,45 @@
+body {
+    font-family: "Verdana";
+    margin: 30px;
+}
+
+h1 {
+    font-family: "Verdana"
+}
+
+h3 {
+    margin-top: 40px;
+}
+
+h4 {
+    text-indent: 10px;
+}
+
+table {
+    font-size: 13px;
+    border-collapse: collapse;
+}
+
+td, th {
+    border: 1px solid grey;
+    padding: 5px;
+    text-align: left;
+}
+
+tbody > tr > th {
+    font-weight: normal;    
+}
+
+span {
+    color: grey;
+}
+
+code {
+    font-size: 14px;
+}
+
+.method-and-path {
+    color: blue;
+    font-size: 20px;
+    font-weight: 600;
+}

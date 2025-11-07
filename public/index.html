@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AirBNC - Documentation</title>
+    <Link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <h1>Welcome, see the available endpoints below:</h1>
@@ -12,58 +13,51 @@
         <h2>Information</h2>
         <p>Visitors to this site can view property information and post and delete property reviews through the HTTP GET, POST and DELETE methods respectively.</p>
         
-        <h3>Properties (group)</h3>
+        <h3>Properties <span>(group)</span></h3>
 
-        <h4>properties (endpoint)</h4>
+        <h4>properties <span>(endpoint)</span></h4>
         <p>Retrieve a listing of every property available for renting. See its name, location, rent per night, and the host's name.</p>
-        <code>GET /api/properties</code>
+        <code class="method-and-path">GET /api/properties</code>
 
         <p>In the response all properties available on the site will be returned, default order is by number of favourites per property. Those tied, are then sub-grouped by their id:</p>
         <code>
             <pre>
-            {
+             {
                 properties: [
                     {
-                        property_id: 2,
-                        property_name: 'Cosy Family House',
-                        location: 'Manchester, UK',
-                        price_per_night: '150',
+                        property_id: 6,
+                        property_name: 'Luxury Penthouse with View',
+                        location: 'London, UK',
+                        price_per_night: '250',
                         host: 'Alice Johnson'
                     },
                     {
-                        property_id: 3,
-                        property_name: 'Chic Studio Near the Beach',
-                        location: 'Brighton, UK',
-                        price_per_night: '90',
-                        host: 'Alice Johnson'
-                    },
-                    {
-                        property_id: 5,
-                        property_name: 'Charming Studio Retreat',
-                        location: 'Bristol, UK',
-                        price_per_night: '85',
-                        host: 'Emma Davis'
-                    },
-                    {
-                        property_id: 7,
-                        property_name: 'Spacious Countryside House',
-                        location: 'Yorkshire, UK',
-                        price_per_night: '200',
+                        property_id: 10,
+                        property_name: 'Quaint Cottage in the Hills',
+                        location: 'Lake District, UK',
+                        price_per_night: '180',
                         host: 'Isabella Martinez'
                     },
                     {
-                        property_id: 8,
-                        property_name: 'Seaside Studio Getaway',
+                        property_id: 15,
+                        property_name: 'Seafront Villa with Infinity Pool',
                         location: 'Cornwall, UK',
-                        price_per_night: '95',
-                        host: 'Emma Davis'
+                        price_per_night: '400',
+                        host: 'Lucas Walker'
+                    },
+                    {
+                        property_id: 20,
+                        property_name: 'Lakeside Luxury Villa',
+                        location: 'Lake District, UK',
+                        price_per_night: '350',
+                        host: 'Lucas Walker'
                     },...
                 ]
             }
             </pre>
         </code>
 
-        <h4>properties (type)</h4>
+        <h4>properties <span>(type)</span></h4>
         <table>
             <thead>
                 <tr>
@@ -91,7 +85,7 @@
                 <tr>
                     <th>price_per_night</th>
                     <th>How much the property costs to rent per night</th>
-                    <th>integer</th>
+                    <th>string</th>
                 </tr>
                 <tr>
                     <th>host</th>
@@ -101,9 +95,9 @@
             </tbody>
         </table>
 
-        <h4>individual property (endpoint)</h4>
+        <h4>individual property <span>(endpoint)</span></h4>
         <p>Retrieve the details for a specified property.</p>
-        <code>GET /api/properties/{id}</code>
+        <code class="method-and-path">GET /api/properties/{id}</code>
         <p>Note: the {id} must be an integer.</p>
 
         <code>
@@ -123,7 +117,7 @@
             </pre>
         </code>
 
-        <h4>individual property (type)</h4>
+        <h4>individual property <span>(type)</span></h4>
         <table>
             <thead>
                 <tr>
@@ -151,11 +145,11 @@
                 <tr>
                     <th>price_per_night</th>
                     <th>How much the property costs to rent per night</th>
-                    <th>integer</th>
+                    <th>string</th>
                 </tr>
                 <tr>
                     <th>description</th>
-                    <th>The host's description of the property, including specific amenities and features.</th>
+                    <th>The host's description of the property, including specific amenities and features</th>
                     <th>string</th>
                 </tr>
                 <tr>
@@ -171,13 +165,13 @@
                 <tr>
                     <th>favourite_count</th>
                     <th>Total number of users that have liked the property</th>
-                    <th>integer</th>
+                    <th>string</th>
                 </tr>
             </tbody>
         </table>
 
         <p>Note: an optional query of user_id can be provided in the endpoint. With this, an extra key of 'favourited' is returned.</p>
-        <code>GET /api/properties/{id}?user_id={user_id}</code>
+        <code class="method-and-path">GET /api/properties/{id}?user_id={user_id}</code>
         <p>Note: the {id} must be an integer.</p>
         
         <code>
@@ -215,41 +209,41 @@
             </tbody>
         </table>
 
-        <h3>Reviews (group)</h3>
+        <h3>Reviews <span>(group)</span></h3>
 
-        <h4>individual property reviews (endpoint)</h4>
+        <h4>individual property reviews <span>(endpoint)</span></h4>
         <p>Retrieve all reviews posted for a specified property and its overall average rating.</p>
-        <code>GET /api/properties/{id}/reviews</code>
+        <code class="method-and-path">GET /api/properties/{id}/reviews</code>
         <p>Note: the {id} must be an integer.</p>
 
         <code>
             <pre>
             {
                 reviews: [
-                        {
-                            review_id: 10,
-                            comment: 'This quaint cottage was absolutely lovely, offering a serene and private escape in the hills. We enjoyed the cozy fireplace, scenic surroundings, and charming decor throughout. It was exactly what we needed for a relaxing weekend.',
-                            rating: 5,
-                            created_at: '2025-04-15T16:45:00.000Z',
-                            guest: 'Sophia Bennett',
-                            guest_avatar: 'https://images.unsplash.com/photo-1606335192038-f5a05f761b3a?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
-                        },
-                        {
-                            review_id: 11,
-                            comment: 'test review',
-                            rating: 4,
-                            created_at: '2024-04-15T16:45:00.000Z',
-                            guest: 'Sophia Bennett',
-                            guest_avatar: 'https://images.unsplash.com/photo-1606335192038-f5a05f761b3a?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
-                        }
-                    ],
-                    average_rating: 4.5
-                }
+                            {
+                                review_id: 10,
+                                comment: 'This quaint cottage was absolutely lovely, offering a serene and private escape in the hills. We enjoyed the cozy fireplace, scenic surroundings, and charming decor throughout. It was exactly what we needed for a relaxing weekend.',
+                                rating: 5,
+                                created_at: '2025-04-15T16:45:00.000Z',
+                                guest: 'Sophia Bennett',
+                                guest_avatar: 'https://images.unsplash.com/photo-1606335192038-f5a05f761b3a?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+                            },
+                            {
+                                review_id: 11,
+                                comment: 'test review',
+                                rating: 4,
+                                created_at: '2024-04-15T16:45:00.000Z',
+                                guest: 'Sophia Bennett',
+                                guest_avatar: 'https://images.unsplash.com/photo-1606335192038-f5a05f761b3a?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+                            }
+                        ],
+                        average_rating: 4.5
+                    }
             </pre>
         </code>
 
         
-        <h4>individual property review (type)</h4>
+        <h4>individual property review <span>(type)</span></h4>
         <table>
             <thead>
                 <tr>
@@ -292,14 +286,14 @@
                 <tr>
                     <th>average_rating</th>
                     <th>Average rating of the property calculated from total ratings posted</th>
-                    <th>integer</th>
+                    <th>string</th>
                 </tr>
             </tbody>
         </table>
 
-        <h4>post property review (endpoint)</h4>
+        <h4>post property review <span>(endpoint)</span></h4>
         <p>Post a review for the specified property. At minimum a guest_id and a rating must be provided in the payload.</p>
-        <code>POST /api/properties/{id}/reviews</code>
+        <code class="method-and-path">POST /api/properties/{id}/reviews</code>
         <p>Note: the {id} must be an integer.</p>
         <p>Note: a valid integer must be provided for the guest_id and rating. Ratings must be between 1 and 5 (inclusive).</p>
 
@@ -325,7 +319,7 @@
             </pre>
         </code>
         
-        <h4>property review payload (type)</h4>
+        <h4>property review payload <span>(type)</span></h4>
         <table>
             <thead>
                 <tr>
@@ -347,7 +341,7 @@
                 </tr>
                 <tr>
                     <th>comment</th>
-                    <th>This is optional. The comment to be posted in the review.</th>
+                    <th>This is optional. The comment to be posted in the review</th>
                     <th>string</th>
                 </tr>
             </tbody>
@@ -398,7 +392,7 @@
                 </tr>
                 <tr>
                     <th>comment</th>
-                    <th>The comment that was posted in the review. This is null if no comment was provided in the payload.</th>
+                    <th>The comment that was posted in the review. This is null if no comment was provided in the payload</th>
                     <th>string</th>
                 </tr>
                  <tr>
@@ -409,97 +403,17 @@
             </tbody>
         </table>
 
-        <h4>individual property review (endpoint)</h4>
-        <p>Retrieve all reviews posted for a specified property and its overall average rating.</p>
-        <code>GET /api/properties/{id}/reviews</code>
-        <p>Note: the {id} must be an integer.</p>
-
-        <code>
-            <pre>
-            {
-                reviews: [
-                        {
-                            review_id: 10,
-                            comment: 'This quaint cottage was absolutely lovely, offering a serene and private escape in the hills. We enjoyed the cozy fireplace, scenic surroundings, and charming decor throughout. It was exactly what we needed for a relaxing weekend.',
-                            rating: 5,
-                            created_at: '2025-04-15T16:45:00.000Z',
-                            guest: 'Sophia Bennett',
-                            guest_avatar: 'https://images.unsplash.com/photo-1606335192038-f5a05f761b3a?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
-                        },
-                        {
-                            review_id: 11,
-                            comment: 'test review',
-                            rating: 4,
-                            created_at: '2024-04-15T16:45:00.000Z',
-                            guest: 'Sophia Bennett',
-                            guest_avatar: 'https://images.unsplash.com/photo-1606335192038-f5a05f761b3a?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
-                        }
-                    ],
-                    average_rating: 4.5
-                }
-            </pre>
-        </code>
-
-        
-        <h4>individual property review (type)</h4>
-        <table>
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Description</th>
-                    <th>Type</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <th>review_id</th>
-                    <th>The identifier for this resource</th>
-                    <th>integer</th>
-                </tr>
-                <tr>
-                    <th>comment</th>
-                    <th>The comment posted by a guest who rented the property</th>
-                    <th>string</th>
-                </tr>
-                <tr>
-                    <th>rating</th>
-                    <th>The rating given by the guest who rented the property</th>
-                    <th>integer</th>
-                </tr>
-                <tr>
-                    <th>created_at</th>
-                    <th>When the review was posted</th>
-                    <th>string</th>
-                </tr>
-                <tr>
-                    <th>guest</th>
-                    <th>Name of the guest that posted the review</th>
-                    <th>string</th>
-                </tr>
-                <tr>
-                    <th>guest_avatar</th>
-                    <th>The profile picture of the guest that posted the review</th>
-                    <th>string</th>
-                </tr>
-                <tr>
-                    <th>average_rating</th>
-                    <th>Average rating of the property calculated from total ratings posted</th>
-                    <th>integer</th>
-                </tr>
-            </tbody>
-        </table>
-
-        <h4>delete property review (endpoint)</h4>
+        <h4>delete property review <span>(endpoint)</span></h4>
         <p>Delete a review. The review with the specified id is deleted.</p>
-        <code>DELETE /api/reviews/{id}</code>
+        <code class="method-and-path">DELETE /api/reviews/{id}</code>
         <p>Note: the {id} must be an integer.</p>
         <p>Note: no body is returned.</p>
 
-        <h3>Users (group)</h3>
+        <h3>Users <span>(group)</span></h3>
 
-        <h4>user (endpoint)</h4>
+        <h4>user <span>(endpoint)</span></h4>
         <p>Retrieve the details of a specified user.</p>
-        <code>GET /api/users/{id}</code>
+        <code class="method-and-path">GET /api/users/{id}</code>
         <p>Note: the {id} must be an integer.</p>
 
         <code>
@@ -518,7 +432,7 @@
             </pre>
         </code>
 
-        <h4>user (type)</h4>
+        <h4>user <span>(type)</span></h4>
         <table>
             <thead>
                 <tr>
