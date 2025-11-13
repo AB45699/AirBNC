@@ -26,6 +26,7 @@
   },
   "homepage": "https://github.com/AB45699/AirBNC#readme",
   "dependencies": {
+    "cors": "^2.8.5",
     "dotenv": "^17.2.2",
     "express": "^5.1.0",
     "jest": "^30.2.0",
@@ -35,7 +36,8 @@
     "pg-format": "^1.0.4"
   },
   "devDependencies": {
-    "supertest": "^7.1.4"
+    "supertest": "^7.1.4",
+    "vite": "^7.2.2"
   },
   "jest": {
     "setupFilesAfterEnv": [
