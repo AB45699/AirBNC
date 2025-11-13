@@ -5,8 +5,11 @@ const { postPropertyReview, getPropertyReviews, deletePropertyReview } = require
 const { handlePathNotFound, handleDataBaseErrors, handleServerErrors, handleCustomErrors } = require("./controllers/errors");
 const { getUserDetails } = require("./controllers/users.js");
 const { getView } = require("./controllers/view.js");
+const cors = require("cors");
 
 const app = express(); 
+
+app.use(cors());
 
 app.use(express.json()); 
 
