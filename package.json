@@ -2,8 +2,9 @@
   "name": "airbnc",
   "version": "1.0.0",
   "description": "This is an API for a property rental service.",
-  "main": "index.js",
+  "main": "listen.js",
   "scripts": {
+    "start": "node listen.js",
     "test-utils": "jest utility",
     "test-inserts": "jest insert",
     "test": "jest app",
