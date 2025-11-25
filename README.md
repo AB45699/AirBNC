@@ -67,7 +67,7 @@ All endpoints are comprehensively tested with Supertest. Tests are found in `__t
 
 To run the test suite, run the command `npm test`.
 
-Utility functions and table-insert functions are tested with Jest. Run `npm test-utils` or `test-inserts` to run each test suite respectively. 
+Utility functions and table-insert functions are tested with Jest. Run `npm run test-utils` or `npm run test-inserts` to run each test suite respectively. 
 
 # 🧠 Refactoring & Improvements
 
