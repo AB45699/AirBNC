@@ -73,7 +73,7 @@ Utility functions and table-insert functions are tested with Jest. Run `npm run 
 
 To test if non-existent property or user ids were provided, functions such as `checkPropertyExists()` in `/models/properties.js` would connect to the database first and if undefined was not returned (i.e. data existed) a second connection would occur to fetch the required data. 
 
-Two group these two connections into one and to streamline the process, I used a `Promise.all` to combine the validation and data retrieval processes. 
+To group these two connections into one and to streamline the process, I used a `Promise.all` to combine the validation and data retrieval processes. 
 
 # 🏗️ To do - work in progress!
 
