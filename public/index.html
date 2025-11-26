@@ -95,6 +95,74 @@
             </tbody>
         </table>
 
+        <h5>Filtering</h4>
+        <p>This endpoint can also take optional filters to change how the data is sorted, its order and more.</p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Filter</th>
+                    <th>Query</th>
+                    <th>Example usage</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th>order</th>
+                    <th>asc</th>
+                    <th><code>/api/properties?order=asc</code></th>
+                    <th>Properties are returned in ascending order of number of favourites</th>
+                </tr>
+                <tr>
+                    <th>order</th>
+                    <th>desc</th>
+                    <th><code>/api/properties?order=desc</code></th>
+                    <th>Properties are returned in descending order of number of favourites</th>
+                </tr>
+                <tr>
+                    <th>sort</th>
+                    <th>favourites</th>
+                    <th><code>/api/properties?sort=favourites</code></th>
+                    <th>Properties are returned in descending order of number of favourites</th>
+                </tr>
+                <tr>
+                    <th>sort</th>
+                    <th>popularity</th>
+                    <th><code>/api/properties?sort=popularity</code></th>
+                    <th>Properties are returned in descending order of the average property rating</th>
+                </tr>
+                <tr>
+                    <th>sort</th>
+                    <th>price_per_night</th>
+                    <th><code>/api/properties?sort=price_per_night</code></th>
+                    <th>Properties are returned in descending order of price per night</th>
+                </tr>
+                <tr>
+                    <th>property_type</th>
+                    <th>Property type e.g. Apartment</th>
+                    <th><code>/api/properties?property_type=Apartment</code></th>
+                    <th>Properties matching the property type query are returned</th>
+                </tr>
+                <tr>
+                    <th>minprice</th>
+                    <th>*number*</th>
+                    <th><code>/api/properties?minprice=100</code></th>
+                    <th>Properties with a price per night more than or equal to the query are returned</th>
+                </tr>
+                <tr>
+                    <th>maxprice</th>
+                    <th>*number*</th>
+                    <th><code>/api/properties?maxprice=300</code></th>
+                    <th>Properties with a price per night less than or equal to the query are returned</th>
+                </tr>
+            </tbody>
+        </table>
+
+        <p>Queries can also be combined. E.g.: 
+            <code style="font-weight:bold;">/api/properties?order=asc&sort=popularity&property_type=Apartment</code>
+        </p>
+
         <h4>individual property <span>(endpoint)</span></h4>
         <p>Retrieve the details for a specified property.</p>
         <code class="method-and-path">GET /api/properties/{id}</code>
