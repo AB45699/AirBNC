@@ -27,7 +27,8 @@ exports.fetchProperties = async (sort="favourites", order="desc", maxprice=null,
             properties.location,
             properties.price_per_night,
             CONCAT(users.first_name, ' ', users.surname) AS host,
-            images.image_url AS image
+            images.image_url AS image,
+            favourites.favourites_count AS num_of_faves
         FROM properties 
         JOIN users 
             ON properties.host_id = users.user_id
