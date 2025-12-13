@@ -28,7 +28,7 @@ describe("app", () => {
 
       expect(Array.isArray(body.properties)).toBe(true);
     });
-    test("each property object has property_id, property_name, location, price_per_night, host, image keys and num_of_faves keys", async () => {
+    test("each property object has property_id, property_name, location, price_per_night, host, image, num_of_faves, and avg_rating keys", async () => {
       const { body } = await request(app).get("/api/properties");
       
       body.properties.forEach((property) => {
@@ -39,6 +39,7 @@ describe("app", () => {
         expect(property).toHaveProperty("host");
         expect(property).toHaveProperty("image");
         expect(property).toHaveProperty("num_of_faves");
+        expect(property).toHaveProperty("avg_rating");
       });
     });
     test("the length of the returned array should be 20 to reflect total number of properties", async () => {
