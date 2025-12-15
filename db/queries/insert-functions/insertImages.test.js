@@ -1,9 +1,9 @@
 const insertImages = require("./insertImages.js"); 
 
-let inputs;
+let imagesData, multiplePropertiesRef;
 
 beforeEach(()=>{
-    inputs = [
+    imagesData = [
         {
             "property_name": "Modern Apartment in City Center",
             "image_url": "https://images.unsplash.com/photo-1471086569966-db3eebc25a59?q=80&w=3540&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
@@ -14,7 +14,12 @@ beforeEach(()=>{
             "image_url": "https://images.unsplash.com/photo-1613545325268-9265e1609167?q=80&w=3540&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
             "alt_tag": "Modern minimalist living room with stone fireplace, large windows, and neutral furnishings."
         }
-    ]
+    ];
+
+    multiplePropertiesRef = {
+        "Modern Apartment in City Center": 1, 
+        "Cosy Family House": 2
+    };
 });
 
 describe("insertImages", ()=>{
@@ -24,25 +29,21 @@ describe("insertImages", ()=>{
     test("returns a nested array", ()=>{
         expect(Array.isArray((insertImages({}, [{}]))[0])).toBe(true);
     }); 
-    test("property id is taken from the propertiesRef object, for one property", ()=>{
-        const testPropertyRef = {"Modern Apartment in City Center": 1};
-        const testImagesData = [{property_name: "Modern Apartment in City Center"}];
+    test("the property id from singlePropertyRef (i.e. 1) is returned. Works for a single property", ()=>{
+        const singlePropertyRef = {"Modern Apartment in City Center": 1};
+        const singleImagesData = [{property_name: "Modern Apartment in City Center"}];
 
-        expect((insertImages(testPropertyRef, testImagesData))[0][0]).toEqual(1);
+        expect((insertImages(singlePropertyRef, singleImagesData))[0][0]).toEqual(1);
     }); 
-    test("property id is taken from the propertiesRef object, for multiple properties", ()=>{
-        const testPropertyRef = {"Modern Apartment in City Center": 1, "Cosy Family House": 2};
-        const testImagesData = [{property_name: "Modern Apartment in City Center"}, {property_name: "Cosy Family House"}];
-        const output = (insertImages(testPropertyRef, testImagesData));
+    test("the property ids are returned for > 1 property. Works for multiple properties", ()=>{
+        const multipleImagesData = [{property_name: "Modern Apartment in City Center"}, {property_name: "Cosy Family House"}];
+        const output = (insertImages(multiplePropertiesRef, multipleImagesData));
 
         expect(output[0][0]).toEqual(1);
         expect(output[1][0]).toEqual(2);
     }); 
     test("all other values of imagesData are returned unchanged", ()=>{
-        const testPropertyRef = {"Modern Apartment in City Center": 1, "Cosy Family House": 2};
-        const testInput = inputs; 
-
-        expect(insertImages(testPropertyRef, testInput)).toEqual([
+        expect(insertImages(multiplePropertiesRef, imagesData)).toEqual([
             [
                 1,
                 "https://images.unsplash.com/photo-1471086569966-db3eebc25a59?q=80&w=3540&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
@@ -56,12 +57,9 @@ describe("insertImages", ()=>{
         ])
     });
     test("the inputted array is not mutated", ()=>{
-        const testPropertyRef = {"Modern Apartment in City Center": 1, "Cosy Family House": 2};
-        const testInput = inputs; 
+        insertImages(multiplePropertiesRef, imagesData); 
 
-        insertImages(testPropertyRef, testInput); 
-
-        expect(testInput).toEqual([
+        expect(imagesData).toEqual([
             {
                 "property_name": "Modern Apartment in City Center",
                 "image_url": "https://images.unsplash.com/photo-1471086569966-db3eebc25a59?q=80&w=3540&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
@@ -75,19 +73,13 @@ describe("insertImages", ()=>{
         ])
     });
     test("the inputted object is not mutated", ()=>{
-        const testPropertyRef = {"Modern Apartment in City Center": 1, "Cosy Family House": 2};
-        const testInput = inputs; 
+        insertImages(multiplePropertiesRef, imagesData);
 
-        insertImages(testPropertyRef, testInput);
-
-        expect(testPropertyRef).toEqual({"Modern Apartment in City Center": 1, "Cosy Family House": 2});
+        expect(multiplePropertiesRef).toEqual({"Modern Apartment in City Center": 1, "Cosy Family House": 2});
     });
     test("the output array is new", ()=>{
-        const testPropertyRef = {"Modern Apartment in City Center": 1, "Cosy Family House": 2};
-        const testInput = inputs; 
+        const output = insertImages(multiplePropertiesRef, imagesData);
 
-        const output = insertImages(testPropertyRef, testInput);
-
-        expect(testInput).not.toBe(output);
-    })
+        expect(imagesData).not.toBe(output);
+    });
 });
