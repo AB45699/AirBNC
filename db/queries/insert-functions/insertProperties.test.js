@@ -42,14 +42,14 @@ describe("insertProperties", ()=>{
         const singleUserRef = {"Alice Johnson": 1};
         const singlePropertyData = [{host_name: "Alice Johnson"}];
 
-        expect((insertProperties(singleUserRef, singlePropertyData))[0][0]).toEqual(1);
+        expect((insertProperties(singleUserRef, singlePropertyData))[0][0]).toBe(1);
     }); 
     test("host ids are returned for > 1 property. Works for multiple hosts.", ()=>{
         const multiplePropertiesData = [{host_name: "Alice Johnson"}, {host_name: "Emma Davis"}];
         const output = (insertProperties(multipleUsersRef, multiplePropertiesData));
 
-        expect(output[0][0]).toEqual(1);
-        expect(output[1][0]).toEqual(2);
+        expect(output[0][0]).toBe(1);
+        expect(output[1][0]).toBe(2);
     }); 
     test("all other values of propertyData are returned unchanged", ()=>{
         expect((insertProperties(multipleUsersRef, propertyData))).toEqual([

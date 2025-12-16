@@ -42,27 +42,27 @@ describe("insertReviews", ()=>{
         const singlePropertyRef = {"Modern Apartment in City Center": 1};
         const singleReviewData = [{property_name: "Modern Apartment in City Center"}];
 
-        expect((insertReviews(singlePropertyRef, {}, singleReviewData))[0][0]).toEqual(1);
+        expect((insertReviews(singlePropertyRef, {}, singleReviewData))[0][0]).toBe(1);
     }); 
     test("the user id from singleUserRef (i.e. 2) is returned. Works for a single user", ()=>{
         const singleUserRef = {"Bob Smith": 2};
         const singleReviewData = [{guest_name: "Bob Smith"}];
 
-        expect((insertReviews({}, singleUserRef, singleReviewData))[0][1]).toEqual(2);
+        expect((insertReviews({}, singleUserRef, singleReviewData))[0][1]).toBe(2);
     }); 
     test("property ids are returned for > 1 property. Works for multiple properties", ()=>{
         const testReviewData = [{property_name: "Modern Apartment in City Center"}, {property_name: "Cosy Family House"}];
         const output = (insertReviews(multiplePropertiesRef, {}, testReviewData));
 
-        expect(output[0][0]).toEqual(1);
-        expect(output[1][0]).toEqual(2);
+        expect(output[0][0]).toBe(1);
+        expect(output[1][0]).toBe(2);
     }); 
     test("user ids are returned for > 1 user. Works for multiple users", ()=>{
         const testReviewData = [{guest_name: "Bob Smith"}, {guest_name: "Frank White"}];
         const output = (insertReviews({}, multipleUsersRef, testReviewData));
 
-        expect(output[0][1]).toEqual(2);
-        expect(output[1][1]).toEqual(3);
+        expect(output[0][1]).toBe(2);
+        expect(output[1][1]).toBe(3);
     }); 
       test("all other values of reviewData are returned unchanged", ()=>{
         expect((insertReviews(multiplePropertiesRef, multipleUsersRef, reviewData))).toEqual([

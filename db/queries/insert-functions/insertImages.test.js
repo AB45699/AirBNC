@@ -33,14 +33,14 @@ describe("insertImages", ()=>{
         const singlePropertyRef = {"Modern Apartment in City Center": 1};
         const singleImagesData = [{property_name: "Modern Apartment in City Center"}];
 
-        expect((insertImages(singlePropertyRef, singleImagesData))[0][0]).toEqual(1);
+        expect((insertImages(singlePropertyRef, singleImagesData))[0][0]).toBe(1);
     }); 
     test("the property ids are returned for > 1 property. Works for multiple properties", ()=>{
         const multipleImagesData = [{property_name: "Modern Apartment in City Center"}, {property_name: "Cosy Family House"}];
         const output = (insertImages(multiplePropertiesRef, multipleImagesData));
 
-        expect(output[0][0]).toEqual(1);
-        expect(output[1][0]).toEqual(2);
+        expect(output[0][0]).toBe(1);
+        expect(output[1][0]).toBe(2);
     }); 
     test("all other values of imagesData are returned unchanged", ()=>{
         expect(insertImages(multiplePropertiesRef, imagesData)).toEqual([
