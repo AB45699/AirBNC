@@ -1,24 +1,34 @@
 const insertReviews = require("./insertReviews.js");
 
-let inputs;
+let reviewData, multiplePropertiesRef, multipleUsersRef;
 
 beforeEach(()=>{
-    inputs = [
-  {
-    "property_name": "Modern Apartment in City Center",
-    "guest_name": "Bob Smith",
-    "rating": 5,
-    "comment": "Great place to stay! The apartment was clean, modern, and very comfortable. Its location in the heart of the city made it extremely convenient to explore nearby attractions, restaurants, and shops. Would definitely stay here again.",
-    "created_at": "2024-03-15T10:24:00Z"
-  },
-  {
-    "property_name": "Cosy Family House",
-    "guest_name": "Frank White",
-    "rating": 4,
-    "comment": "Lovely house that was just perfect for our family getaway. It had all the amenities we needed and the surrounding neighborhood was quiet and safe. We enjoyed spending evenings in the garden and cooking meals together in the spacious kitchen.",
-    "created_at": "2024-05-20T15:42:00Z"
-  }
-]
+    reviewData = [
+        {
+            "property_name": "Modern Apartment in City Center",
+            "guest_name": "Bob Smith",
+            "rating": 5,
+            "comment": "Great place to stay! The apartment was clean, modern, and very comfortable. Its location in the heart of the city made it extremely convenient to explore nearby attractions, restaurants, and shops. Would definitely stay here again.",
+            "created_at": "2024-03-15T10:24:00Z"
+        },
+        {
+            "property_name": "Cosy Family House",
+            "guest_name": "Frank White",
+            "rating": 4,
+            "comment": "Lovely house that was just perfect for our family getaway. It had all the amenities we needed and the surrounding neighborhood was quiet and safe. We enjoyed spending evenings in the garden and cooking meals together in the spacious kitchen.",
+            "created_at": "2024-05-20T15:42:00Z"
+        }
+    ];
+
+    multiplePropertiesRef = {
+        "Modern Apartment in City Center": 1, 
+        "Cosy Family House": 2
+    };
+
+    multipleUsersRef = {
+        "Bob Smith": 2, 
+        "Frank White": 3
+    };
 });
 
 describe("insertReviews", ()=>{
@@ -28,40 +38,34 @@ describe("insertReviews", ()=>{
     test("returns a nested array", ()=>{
         expect(Array.isArray((insertReviews({}, {}, [{}]))[0])).toBe(true);
     }); 
-    test("property id is taken from the propertiesRef object, for one property", ()=>{
-        const testPropertyRef = {"Modern Apartment in City Center": 1};
-        const testReviewData = [{property_name: "Modern Apartment in City Center"}];
+    test("the property id from singlePropertyRef (i.e. 1) is returned. Works for a single property", ()=>{
+        const singlePropertyRef = {"Modern Apartment in City Center": 1};
+        const singleReviewData = [{property_name: "Modern Apartment in City Center"}];
 
-        expect((insertReviews(testPropertyRef, {}, testReviewData))[0][0]).toEqual(1);
+        expect((insertReviews(singlePropertyRef, {}, singleReviewData))[0][0]).toEqual(1);
     }); 
-    test("guest id is taken from the userRef object, for one guest", ()=>{
-        const testUserRef = {"Bob Smith": 2};
-        const testReviewData = [{guest_name: "Bob Smith"}];
+    test("the user id from singleUserRef (i.e. 2) is returned. Works for a single user", ()=>{
+        const singleUserRef = {"Bob Smith": 2};
+        const singleReviewData = [{guest_name: "Bob Smith"}];
 
-        expect((insertReviews({}, testUserRef, testReviewData))[0][1]).toEqual(2);
+        expect((insertReviews({}, singleUserRef, singleReviewData))[0][1]).toEqual(2);
     }); 
-    test("property id is taken from the propertiesRef object, for multiple properties", ()=>{
-        const testPropertyRef = {"Modern Apartment in City Center": 1, "Cosy Family House": 2};
+    test("property ids are returned for > 1 property. Works for multiple properties", ()=>{
         const testReviewData = [{property_name: "Modern Apartment in City Center"}, {property_name: "Cosy Family House"}];
-        const output = (insertReviews(testPropertyRef, {}, testReviewData));
+        const output = (insertReviews(multiplePropertiesRef, {}, testReviewData));
 
         expect(output[0][0]).toEqual(1);
         expect(output[1][0]).toEqual(2);
     }); 
-    test("guest id is taken from the userRef object, for multiple guests", ()=>{
-        const testUserRef = {"Bob Smith": 2, "Frank White": 3};
+    test("user ids are returned for > 1 user. Works for multiple users", ()=>{
         const testReviewData = [{guest_name: "Bob Smith"}, {guest_name: "Frank White"}];
-        const output = (insertReviews({}, testUserRef, testReviewData));
+        const output = (insertReviews({}, multipleUsersRef, testReviewData));
 
         expect(output[0][1]).toEqual(2);
         expect(output[1][1]).toEqual(3);
     }); 
       test("all other values of reviewData are returned unchanged", ()=>{
-        const testUserRef = {"Bob Smith": 2, "Frank White": 3};
-        const testPropertyRef = {"Modern Apartment in City Center" : 1, "Cosy Family House": 2}
-        const testInput = inputs;
-
-        expect((insertReviews(testPropertyRef, testUserRef, testInput))).toEqual([
+        expect((insertReviews(multiplePropertiesRef, multipleUsersRef, reviewData))).toEqual([
             [
                 1, 
                 2, 
@@ -78,14 +82,10 @@ describe("insertReviews", ()=>{
             ]
         ]);
     });
-    test("the inputed array is not mutated", ()=>{
-        const testInput = inputs;
-        const testUserRef = {"Bob Smith": 2, "Frank White": 3};
-        const testPropertyRef = {"Modern Apartment in City Center" : 1, "Cosy Family House": 2};
+    test("the inputted array is not mutated", ()=>{
+        insertReviews(multiplePropertiesRef, multipleUsersRef, reviewData); 
 
-        insertReviews(testPropertyRef, testUserRef, testInput); 
-
-        expect(testInput).toEqual([
+        expect(reviewData).toEqual([
             {
                 "property_name": "Modern Apartment in City Center",
                 "guest_name": "Bob Smith",
@@ -102,23 +102,15 @@ describe("insertReviews", ()=>{
             }
         ]);
     });
-    test("the inputed objects are not mutated", ()=>{
-        const testInput = inputs;
-        const testUserRef = {"Bob Smith": 2, "Frank White": 3};
-        const testPropertyRef = {"Modern Apartment in City Center" : 1, "Cosy Family House": 2};
+    test("the inputted objects are not mutated", ()=>{
+        insertReviews(multiplePropertiesRef, multipleUsersRef, reviewData); 
 
-        insertReviews(testPropertyRef, testUserRef, testInput); 
-
-        expect(testUserRef).toEqual({"Bob Smith": 2, "Frank White": 3});
-        expect(testPropertyRef).toEqual({"Modern Apartment in City Center" : 1, "Cosy Family House": 2});
+        expect(multipleUsersRef).toEqual({"Bob Smith": 2, "Frank White": 3});
+        expect(multiplePropertiesRef).toEqual({"Modern Apartment in City Center" : 1, "Cosy Family House": 2});
     });
     test("the output is a new array", ()=>{
-        const testInput = inputs;
-        const testUserRef = {"Bob Smith": 2, "Frank White": 3};
-        const testPropertyRef = {"Modern Apartment in City Center" : 1, "Cosy Family House": 2};
+        const output = insertReviews(multiplePropertiesRef, multipleUsersRef, reviewData); 
 
-        const output = insertReviews(testPropertyRef, testUserRef, testInput); 
-
-        expect(testInput).not.toBe(output);
+        expect(reviewData).not.toBe(output);
     })
 });
