@@ -6,16 +6,6 @@ function createPropertiesRef(properties) {
   });
 
   return propertiesRefObj;
-}
+};
 
-function formatProperties(properties, propertyRef) {
-
-    return properties.map(({property_name })=> [
-
-        propertyRef[property_name]
-
-    ])
-
-}
-
-module.exports = { createPropertiesRef, formatProperties };
+module.exports = createPropertiesRef;

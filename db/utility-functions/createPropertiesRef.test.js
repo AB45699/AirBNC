@@ -1,4 +1,4 @@
-const { createPropertiesRef, formatProperties } = require("./createPropertiesRef.js");
+const createPropertiesRef = require("./createPropertiesRef.js");
 
 describe("createPropertiesRef", () => {
   test("returns an object", () => {
@@ -55,31 +55,5 @@ describe("createPropertiesRef", () => {
       { name: "Modern Apartment in City Center", property_id: 1 },
       { name: "Spacious Countryside House", property_id: 7 },
     ]);
-  });
-});
-
-describe("formatProperties", () => {
-  test("the returned formatted property has its property_id as its value, for one property", () => {
-    const propertyRef = createPropertiesRef([
-      { name: "Modern Apartment in City Center", property_id: 1 },
-    ]);
-    const testReviewData = [
-      { property_name: "Modern Apartment in City Center" },
-    ];
-
-    expect(formatProperties(testReviewData, propertyRef)[0][0]).toBe(1);
-  });
-  test("the returned formatted property has its property_id as its value, for multiple properties", () => {
-    const propertyRef = createPropertiesRef([
-      { name: "Modern Apartment in City Center", property_id: 1 },
-      { name: "Spacious Countryside House", property_id: 7 },
-    ]);
-    const testReviewData = [
-      { property_name: "Modern Apartment in City Center" },
-      { property_name: "Spacious Countryside House" },
-    ];
-
-    expect(formatProperties(testReviewData, propertyRef)[0][0]).toBe(1);
-    expect(formatProperties(testReviewData, propertyRef)[1][0]).toBe(7);
   });
 });

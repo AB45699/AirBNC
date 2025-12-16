@@ -1,4 +1,4 @@
-const { createUsersRef, formatUsers } = require("./createUsersRefs.js");
+const createUsersRef = require("./createUsersRefs.js");
 
 describe("createUsersRef", () => {
   test("returns an object", () => {
@@ -51,31 +51,5 @@ describe("createUsersRef", () => {
       { first_name: "Alice", surname: "Johnson", user_id: 1 },
       { first_name: "Emma", surname: "Davis", user_id: 3 },
     ]);
-  });
-});
-
-describe("formatUsers", () => {
-  test("the returned formatted user has its user_id as the host_id, for one user", () => {
-    const userRef = {"Alice Johnson": 1};
-    const testUserData = [
-      { host_name: "Alice Johnson" }
-    ] 
-
-    expect(formatUsers(testUserData, userRef)[0][0]).toBe(1);
-  });
-  test("the returned formatted users has the user_id as the host_id, for multiple users", () => {
-    const usersRef = createUsersRef([
-      { first_name: "Alice", surname: "Johnson", user_id: 1 },
-      { first_name: "Emma", surname: "Davis", user_id: 3 },
-    ]);
-
-    const testUserData = [
-      { host_name: "Alice Johnson"},
-      { host_name: "Emma Davis"}
-    ]
-
-    expect(formatUsers(testUserData, usersRef)[0][0]).toBe(1);
-    expect(formatUsers(testUserData, usersRef)[1][0]).toBe(3);
-
   });
 });

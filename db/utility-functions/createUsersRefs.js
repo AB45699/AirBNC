@@ -7,15 +7,6 @@ function createUsersRef(users) {
     });
 
     return usersRefObj;
-}
+};
 
-function formatUsers(users, userRef) {
-    return users.map(({ host_name }) => [
-        
-        userRef[host_name] 
-
-        ]
-    )
-}
-
-module.exports = { createUsersRef, formatUsers };
+module.exports = createUsersRef;
