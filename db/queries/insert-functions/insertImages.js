@@ -1,8 +1,8 @@
 function insertImages(propertyRef, imagesData) {
-    return imagesData.map((image)=>[
-        propertyRef[image.property_name],
-        image.image_url, 
-        image.alt_tag
+    return imagesData.map(({property_name, image_url, alt_tag})=>[
+        propertyRef[property_name],
+        image_url, 
+        alt_tag
     ])
 };
 

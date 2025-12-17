@@ -35,9 +35,6 @@ describe("insertProperties", ()=>{
     test("returns an array", ()=>{
         expect(Array.isArray(insertProperties({}, [{}]))).toBe(true);
     });
-    test("returns a nested array", ()=>{
-        expect(Array.isArray((insertProperties({}, [{}]))[0])).toBe(true);
-    })
     test("host id from singleUserRef (i.e. 1) is returned. Works for one host", ()=>{
         const singleUserRef = {"Alice Johnson": 1};
         const singlePropertyData = [{host_name: "Alice Johnson"}];
@@ -70,6 +67,13 @@ describe("insertProperties", ()=>{
                 "Stylish apartment located in the heart of Birmingham, close to all attractions."
             ]
         ]);
+    });
+    test("output is a nested array", ()=>{
+        const output = insertProperties(multipleUsersRef, propertyData);
+
+        output.forEach((nestedItem)=>{
+            expect(Array.isArray(nestedItem)).toBe(true);
+        });
     });
     test("the inputed array is not mutated", ()=>{
         insertProperties(multipleUsersRef, propertyData)

@@ -1,10 +1,10 @@
 function insertReviews(propertyRef, userRef, reviewData) {
-    return reviewData.map((review)=>[
-        propertyRef[review.property_name], 
-        userRef[review.guest_name], 
-        review.rating, 
-        review.comment, 
-        review.created_at
+    return reviewData.map(({property_name, guest_name, rating, comment, created_at})=>[
+        propertyRef[property_name], 
+        userRef[guest_name], 
+        rating, 
+        comment, 
+        created_at
     ]);
 };
 

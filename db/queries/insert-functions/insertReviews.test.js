@@ -35,9 +35,9 @@ describe("insertReviews", ()=>{
     test("returns an array", ()=>{
         expect(Array.isArray(insertReviews({}, {}, [{}]))).toBe(true);
     });
-    test("returns a nested array", ()=>{
-        expect(Array.isArray((insertReviews({}, {}, [{}]))[0])).toBe(true);
-    }); 
+    // test("returns a nested array", ()=>{
+    //     expect(Array.isArray((insertReviews({}, {}, [{}]))[0])).toBe(true);
+    // }); 
     test("the property id from singlePropertyRef (i.e. 1) is returned. Works for a single property", ()=>{
         const singlePropertyRef = {"Modern Apartment in City Center": 1};
         const singleReviewData = [{property_name: "Modern Apartment in City Center"}];
@@ -50,20 +50,19 @@ describe("insertReviews", ()=>{
 
         expect((insertReviews({}, singleUserRef, singleReviewData))[0][1]).toBe(2);
     }); 
-    test("property ids are returned for > 1 property. Works for multiple properties", ()=>{
-        const testReviewData = [{property_name: "Modern Apartment in City Center"}, {property_name: "Cosy Family House"}];
-        const output = (insertReviews(multiplePropertiesRef, {}, testReviewData));
+    test("property id and user ids are returned for multiple property/user items", ()=>{
+        const testReviewData = [
+            {guest_name: "Bob Smith", property_name: "Modern Apartment in City Center"}, 
+            {guest_name: "Frank White", property_name: "Cosy Family House"}
+        ];
+        const output = (insertReviews(multiplePropertiesRef, multipleUsersRef, testReviewData));
 
         expect(output[0][0]).toBe(1);
-        expect(output[1][0]).toBe(2);
-    }); 
-    test("user ids are returned for > 1 user. Works for multiple users", ()=>{
-        const testReviewData = [{guest_name: "Bob Smith"}, {guest_name: "Frank White"}];
-        const output = (insertReviews({}, multipleUsersRef, testReviewData));
-
         expect(output[0][1]).toBe(2);
+
+        expect(output[1][0]).toBe(2);
         expect(output[1][1]).toBe(3);
-    }); 
+    });  
       test("all other values of reviewData are returned unchanged", ()=>{
         expect((insertReviews(multiplePropertiesRef, multipleUsersRef, reviewData))).toEqual([
             [
@@ -81,6 +80,13 @@ describe("insertReviews", ()=>{
                 "2024-05-20T15:42:00Z"
             ]
         ]);
+    });
+    test("output is a nested array", ()=>{
+        const output = insertReviews(multiplePropertiesRef, multipleUsersRef, reviewData);
+
+        output.forEach((nestedItem)=>{
+            expect(Array.isArray(nestedItem)).toBe(true);
+        });
     });
     test("the inputted array is not mutated", ()=>{
         insertReviews(multiplePropertiesRef, multipleUsersRef, reviewData); 

@@ -25,9 +25,6 @@ beforeEach(()=>{
 describe("insertImages", ()=>{
     test("returns an array", ()=>{
         expect(Array.isArray(insertImages({}, [{}]))).toBe(true);
-    });
-    test("returns a nested array", ()=>{
-        expect(Array.isArray((insertImages({}, [{}]))[0])).toBe(true);
     }); 
     test("the property id from singlePropertyRef (i.e. 1) is returned. Works for a single property", ()=>{
         const singlePropertyRef = {"Modern Apartment in City Center": 1};
@@ -55,6 +52,13 @@ describe("insertImages", ()=>{
                 "Modern minimalist living room with stone fireplace, large windows, and neutral furnishings."
             ]
         ])
+    });
+    test("output is a nested array", ()=>{
+        const output = insertImages(multiplePropertiesRef, imagesData);
+
+        output.forEach((nestedItem)=>{
+            expect(Array.isArray(nestedItem)).toBe(true);
+        });
     });
     test("the inputted array is not mutated", ()=>{
         insertImages(multiplePropertiesRef, imagesData); 

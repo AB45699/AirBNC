@@ -1,11 +1,11 @@
 function insertProperties(userRef, propertyData) {
-    return propertyData.map((property) => [
-            userRef[property.host_name], 
-            property.name, 
-            property.location, 
-            property.property_type, 
-            property.price_per_night,
-            property.description
+    return propertyData.map(({host_name, name, location, property_type, price_per_night, description}) => [
+            userRef[host_name], 
+            name, 
+            location, 
+            property_type, 
+            price_per_night,
+            description
     ]);
 };
 
