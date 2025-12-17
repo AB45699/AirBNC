@@ -1,12 +1,13 @@
 const db = require("../connection.js");
 const format = require("pg-format"); 
-const { createUsersRef } = require("../utility-functions/createUsersRefs.js");
-const { createPropertiesRef } = require("../utility-functions/createPropertiesRef.js");
+const createUsersRef  = require("../utility-functions/createUsersRefs.js");
+const createPropertiesRef = require("../utility-functions/createPropertiesRef.js");
 const insertPropertyTypes = require("./insert-functions/insertPropertyTypes.js");
 const insertUsers = require("./insert-functions/insertUsers.js");
 const insertReviews = require("./insert-functions/insertReviews.js");
 const insertProperties = require("./insert-functions/insertProperties.js");
 const insertImages = require("./insert-functions/insertImages.js");
+const insertFavourites = require("./insert-functions/insertFavourites.js");
 
 async function insertIntoTables(propertyTypes, users, properties, reviews, images, favourites, bookings) {
     
@@ -50,10 +51,7 @@ async function insertIntoTables(propertyTypes, users, properties, reviews, image
     await db.query(
         format(
             `INSERT INTO favourites (guest_id, property_id) VALUES %L;`, 
-            favourites.map(({ guest_name, property_name }) => [
-                usersRefs[guest_name],
-                propertiesRefs[property_name], 
-            ])
+            insertFavourites(usersRefs, propertiesRefs, favourites)
         )
     );
 
