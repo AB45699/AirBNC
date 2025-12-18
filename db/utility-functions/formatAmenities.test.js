@@ -19,6 +19,12 @@ describe("formatAmenities", ()=>{
         const singleAmenity = [{amenities: []}];
 
         expect(formatAmenities(singleAmenity)).toEqual([]);
+    });
+    test("a new empty array is returned when amenities for a single property input is empty", ()=>{
+        const singleAmenity = [{amenities: []}];
+        const output = formatAmenities(singleAmenity);
+
+        expect(output).not.toBe(singleAmenity);
     })
     test("nests a single amenity within the returned array", ()=>{
         const singleAmenity = [{amenities: ["Wifi"]}];
@@ -63,5 +69,38 @@ describe("formatAmenities", ()=>{
         const output = formatAmenities(multiplePropertiesAmenities);
       
         expect(output).toEqual([["Parking"], ["Iron"], ["WiFi"]]);
-    })
+    });
+    test("the outputted array is new", ()=>{
+        const multiplePropertiesAmenities = [
+            {
+                amenities: ["WiFi", "TV", "Kitchen"]
+            },
+            {
+                amenities: ["Parking", "Iron", "WiFi"]
+            }
+        ];
+        const output = formatAmenities(multiplePropertiesAmenities);
+
+        expect(multiplePropertiesAmenities).not.toBe(output);
+    });
+    test("the inputted array is not mutated", ()=>{
+        const multiplePropertiesAmenities = [
+            {
+                amenities: ["WiFi", "TV", "Kitchen"]
+            },
+            {
+                amenities: ["Parking", "Iron", "WiFi"]
+            }
+        ];
+        formatAmenities(multiplePropertiesAmenities);
+
+        expect(multiplePropertiesAmenities).toEqual([
+            {
+                amenities: ["WiFi", "TV", "Kitchen"]
+            },
+            {
+                amenities: ["Parking", "Iron", "WiFi"]
+            }
+        ])
+    });
 }) 
