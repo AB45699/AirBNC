@@ -60,7 +60,7 @@ describe("insertReviews", ()=>{
         expect(output[1][0]).toBe(2);
         expect(output[1][1]).toBe(3);
     });  
-      test("all other values of reviewData are returned unchanged", ()=>{
+    test("all other values of reviewData are returned unchanged", ()=>{
         expect((insertReviews(multiplePropertiesRef, multipleUsersRef, reviewData))).toEqual([
             [
                 1, 
