@@ -34,10 +34,7 @@ beforeEach(()=>{
 describe("insertReviews", ()=>{
     test("returns an array", ()=>{
         expect(Array.isArray(insertReviews({}, {}, [{}]))).toBe(true);
-    });
-    // test("returns a nested array", ()=>{
-    //     expect(Array.isArray((insertReviews({}, {}, [{}]))[0])).toBe(true);
-    // }); 
+    }); 
     test("the property id from singlePropertyRef (i.e. 1) is returned. Works for a single property", ()=>{
         const singlePropertyRef = {"Modern Apartment in City Center": 1};
         const singleReviewData = [{property_name: "Modern Apartment in City Center"}];
