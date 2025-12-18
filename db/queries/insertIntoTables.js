@@ -9,6 +9,7 @@ const insertProperties = require("./insert-functions/insertProperties.js");
 const insertImages = require("./insert-functions/insertImages.js");
 const insertFavourites = require("./insert-functions/insertFavourites.js");
 const insertBookings = require("./insert-functions/insertBookings.js");
+const formatAmenities = require("../utility-functions/formatAmenities.js");
 
 async function insertIntoTables(propertyTypes, users, properties, reviews, images, favourites, bookings) {
     
@@ -63,13 +64,11 @@ async function insertIntoTables(propertyTypes, users, properties, reviews, image
         )
     );
 
-    const allAmenities = properties.map(({ amenities }) => {
-        return amenities.map((amenity) => [amenity]) 
-    }).flat() 
+    const allAmenities = formatAmenities(properties);
 
     await db.query(
         format(
-            `INSERT INTO amenities (amenity) VALUES %L ON CONFLICT DO NOTHING;`, 
+            `INSERT INTO amenities (amenity) VALUES %L;`, 
             allAmenities
         )
     );
