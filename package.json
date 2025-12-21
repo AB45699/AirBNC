@@ -37,6 +37,7 @@
     "pg-format": "^1.0.4"
   },
   "devDependencies": {
+    "baseline-browser-mapping": "^2.9.11",
     "supertest": "^7.1.4",
     "vite": "^7.2.2"
   },
