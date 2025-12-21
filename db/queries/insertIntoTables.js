@@ -10,6 +10,7 @@ const insertImages = require("./insert-functions/insertImages.js");
 const insertFavourites = require("./insert-functions/insertFavourites.js");
 const insertBookings = require("./insert-functions/insertBookings.js");
 const formatAmenities = require("../utility-functions/formatAmenities.js");
+const insertPropertiesAmenities = require("./insert-functions/insertPropertiesAmenities.js");
 
 async function insertIntoTables(propertyTypes, users, properties, reviews, images, favourites, bookings) {
     
@@ -73,20 +74,12 @@ async function insertIntoTables(propertyTypes, users, properties, reviews, image
         )
     );
 
-    const propertiesToAmenities = properties.map(({ name, amenities }) => {
-        return amenities.map((amenity) => [name, amenity])
-    }).flat() 
-    
-    
     await db.query(
         format(
             `INSERT INTO properties_amenities (property_id, amenity_slug) VALUES %L;`,
-            propertiesToAmenities.map((propToAmenity) => [
-                propertiesRefs[propToAmenity[0]], 
-                propToAmenity[1]
-        ])
+            insertPropertiesAmenities(propertiesRefs, properties)
         )
-    )
+    );
 }
 
 module.exports = insertIntoTables;
