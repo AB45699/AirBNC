@@ -42,7 +42,7 @@ describe("insertPropertiesAmenities", ()=>{
         expect(output).toEqual([]);
         expect(output).not.toBe(emptyPropertyData);
     }); 
-    test("the property id from singlePropertyRef (i.e. 1) is returned along with each amenity. Works for a single property and amenity", ()=>{
+    test("returns property id-amenity pair for a single property and amenity", ()=>{
         const singlePropertyAmenityData = [
             {
                 "name": "Modern Apartment in City Center", 
@@ -52,7 +52,7 @@ describe("insertPropertiesAmenities", ()=>{
 
         expect(insertPropertiesAmenities(singlePropertyRef, singlePropertyAmenityData)).toEqual([[1, "WiFi"]]);
     });
-    test("the property id from singlePropertyRef (i.e. 1) is returned along with each amenity. Works for a single property and multiple amenities", ()=>{
+    test("returns property id-amenity pair for a single property and multiple amenities", ()=>{
         expect(insertPropertiesAmenities(singlePropertyRef, singlePropertyData)).toEqual(
             [
                 [1, "WiFi"],
@@ -61,7 +61,7 @@ describe("insertPropertiesAmenities", ()=>{
             ]
         );
     });
-    test("the property ids for multiple properties are returned along with each amenity. Works for multiple properties and multiple amenities", ()=>{
+    test("returns property id-amenity pair for multiple properties and amenities", ()=>{
         expect(insertPropertiesAmenities(multiplePropertyRefs, propertyData)).toEqual(
             [
                 [1, "WiFi"],
@@ -74,32 +74,30 @@ describe("insertPropertiesAmenities", ()=>{
             ]
         );
     });
-    test("if propertyRef input is empty, property id is returned as undefined", ()=>{
-        expect(insertPropertiesAmenities({}, singlePropertyData)).toEqual(
-            [
-                [undefined, "WiFi"], 
-                [undefined, "TV"], 
-                [undefined, "Kitchen"]
-            ]
-        );
-    });
-    test("if the properties in propertyRef and propertyData mismatch, property id is returned as undefined", ()=>{
-        const mismatchedPropertyRef = {"Chic Studio Near the Beach": 4};
+    test("if propertyRef input is empty, a new empty array is returned", ()=>{
+        const output = insertPropertiesAmenities({}, propertyData); 
 
-        expect(insertPropertiesAmenities(mismatchedPropertyRef, singlePropertyData)).toEqual(
+        expect(output).toEqual([]);
+        expect(output).not.toBe(propertyData);
+    });
+    test("a property id-amenity pair is ommitted if there is no propertyRef for a property in propertyData", ()=>{
+        const propertyRef = {"Chic Studio Near the Beach": 4, "Cosy Family House": 3};
+
+        expect(insertPropertiesAmenities(propertyRef, propertyData)).toEqual(
             [
-                [undefined, "WiFi"], 
-                [undefined, "TV"], 
-                [undefined, "Kitchen"]
+                [3, "TV"], 
+                [3, "Kitchen"], 
+                [3, "Parking"], 
+                [3, "Iron"]
             ]
         );
     });
     test("if amenities are empty, a new empty array is returned", ()=>{
-        const emptyPropertyAmenities = [{"name": "Modern Apartment in City Center", "amenities": []}];
-        const output = insertPropertiesAmenities(singlePropertyRef, emptyPropertyAmenities); 
+        const noAmenitiesPropertyData = [{"name": "Modern Apartment in City Center", "amenities": []}];
+        const output = insertPropertiesAmenities(singlePropertyRef, noAmenitiesPropertyData); 
 
         expect(output).toEqual([]);
-        expect(output).not.toBe(emptyPropertyAmenities);
+        expect(output).not.toBe(noAmenitiesPropertyData);
     });
     test("the inputted object is not mutated", ()=>{
         insertPropertiesAmenities(multiplePropertyRefs, propertyData);
