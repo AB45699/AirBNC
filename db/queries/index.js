@@ -1,0 +1,11 @@
+exports.createUsersRef = require("../../db/utility-functions/createUsersRefs.js");
+exports.createPropertiesRef = require("../../db/utility-functions/createPropertiesRef.js");
+exports.insertPropertyTypes = require("./insert-functions/insertPropertyTypes.js");
+exports.insertUsers = require("./insert-functions/insertUsers.js");
+exports.insertReviews = require("./insert-functions/insertReviews.js");
+exports.insertProperties = require("./insert-functions/insertProperties.js");
+exports.insertImages = require("./insert-functions/insertImages.js");
+exports.insertFavourites = require("./insert-functions/insertFavourites.js");
+exports.insertBookings = require("./insert-functions/insertBookings.js");
+exports.insertAmenities = require("./insert-functions/insertAmenities.js");
+exports.insertPropertiesAmenities = require("./insert-functions/insertPropertiesAmenities.js");
