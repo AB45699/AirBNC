@@ -4,6 +4,8 @@ AirBNC is a browser-based application. This is the backend server, a RESTful API
 
 **Link to hosted server**: https://airbnc-oijh.onrender.com  
 
+**Link to Front-end repo**: https://github.com/AB45699/AirBNC-Frontend 
+
 
 # 🚀 How it is made
 
