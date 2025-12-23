@@ -2,18 +2,19 @@ function insertPropertiesAmenities(propertyRef, properties) {
     const propertiesToAmenities = [];
 
     for (const {amenities, name} of properties) {
-        if (Array.isArray(amenities)) {
-            amenities.forEach((amenity)=>{
-                const propertyID = propertyRef[name];
+        if (!Array.isArray(amenities)) continue ;
 
-                if (propertyID !== undefined) {
-                    propertiesToAmenities.push([
-                        propertyID, 
-                        amenity
-                    ])
-                };
-            });
-        };
+        const propertyID = propertyRef[name];
+
+        if (propertyID === undefined) continue ;
+
+        amenities.forEach((amenity)=>{
+            propertiesToAmenities.push([
+                    propertyID, 
+                    amenity
+                ])
+        });
+
     };
 
     return propertiesToAmenities;
