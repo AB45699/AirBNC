@@ -29,28 +29,40 @@
                         property_name: 'Luxury Penthouse with View',
                         location: 'London, UK',
                         price_per_night: '250',
-                        host: 'Alice Johnson'
+                        host: 'Alice Johnson',
+                        image: "https://images.unsplash.com/...",
+                        favourites: "5",
+                        avg_rating: "5.0000000000000000"
                     },
                     {
                         property_id: 10,
                         property_name: 'Quaint Cottage in the Hills',
                         location: 'Lake District, UK',
                         price_per_night: '180',
-                        host: 'Isabella Martinez'
+                        host: 'Isabella Martinez',
+                        image: "https://images.unsplash.com/...",
+                        favourites: "5",
+                        avg_rating: "4.5000000000000000"
                     },
                     {
                         property_id: 15,
                         property_name: 'Seafront Villa with Infinity Pool',
                         location: 'Cornwall, UK',
                         price_per_night: '400',
-                        host: 'Lucas Walker'
+                        host: 'Lucas Walker',
+                        image: "https://images.unsplash.com/...",
+                        favourites: "5",
+                        avg_rating: null
                     },
                     {
                         property_id: 20,
                         property_name: 'Lakeside Luxury Villa',
                         location: 'Lake District, UK',
                         price_per_night: '350',
-                        host: 'Lucas Walker'
+                        host: 'Lucas Walker',
+                        image: "https://images.unsplash.com/...",
+                        favourites: "5",
+                        avg_rating: null
                     },...
                 ]
             }
@@ -91,6 +103,21 @@
                     <th>host</th>
                     <th>The property's owner</th>
                     <th>string</th>
+                </tr>
+                <tr>
+                    <th>image</th>
+                    <th>The URL for the property image</th>
+                    <th>string</th>
+                </tr>
+                <tr>
+                    <th>favourites</th>
+                    <th>The number of favourites the property has</th>
+                    <th>string</th>
+                </tr>
+                <tr>
+                    <th>avg_rating</th>
+                    <th>The average rating of the property</th>
+                    <th>string, or null if no reviews</th>
                 </tr>
             </tbody>
         </table>
