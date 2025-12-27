@@ -1,16 +1,10 @@
 const insertFavourites = require("./insertFavourites.js"); 
 
-let singleFavouritesData, multipleFavouritesData, multipleUsersRef, multiplePropertiesRef; 
+let favouritesData, multipleUsersRef, multiplePropertiesRef; 
 
 beforeEach(()=>{
-    singleFavouritesData = [
-        {
-            "guest_name": "Bob Smith", 
-            "property_name": "Cosy Country Cottage"
-        }
-    ];
 
-    multipleFavouritesData = [
+    favouritesData = [
         {
             "guest_name": "Bob Smith", 
             "property_name": "Cosy Country Cottage"
@@ -36,40 +30,82 @@ describe("insertFavourites", ()=>{
     test("returns an array", ()=>{
         expect(Array.isArray(insertFavourites({}, {}, []))).toBe(true);
     });
-    test("the user id from singleUserRef (i.e. 2) is returned. Works for a single user", ()=>{
+    test("property id-user id pair is returned correctly for single favourites data", ()=>{
         const singleUserRef = {"Bob Smith": 2}; 
-        const output = insertFavourites(singleUserRef, {}, singleFavouritesData);
-
-        expect(output[0][0]).toBe(2);
-    });
-    test("the property id from singlePropertyRef (i.e. 4) is returned. Works for a single property", ()=>{
         const singlePropertyRef = {"Cosy Country Cottage": 4}; 
-        const output = insertFavourites({}, singlePropertyRef, singleFavouritesData); 
+        const singleFavouritesData = [
+            {
+                "guest_name": "Bob Smith", 
+                "property_name": "Cosy Country Cottage"
+            }
+        ];
 
-        expect(output[0][1]).toBe(4);
+        const output = insertFavourites(singleUserRef, singlePropertyRef, singleFavouritesData);
+
+        expect(output).toEqual([[2, 4]]);
     });
-    test("user ids and property ids are returned for multiple users and properties", ()=>{
-        const output = insertFavourites(multipleUsersRef, multiplePropertiesRef, multipleFavouritesData);
+    test("property id-user id pairs are returned correctly for multiple users and properties", ()=>{
+        const output = insertFavourites(multipleUsersRef, multiplePropertiesRef, favouritesData);
 
         expect(output).toEqual([[2, 4], [3, 6]]);
     });
-    test("output is a nested array", ()=>{
-        const output = insertFavourites(multipleUsersRef, multiplePropertiesRef, multipleFavouritesData);
+    test("an empty favouritesData input returns a new empty array", ()=>{
+        const emptyFavouritesData = [];
+        const output = insertFavourites(multipleUsersRef, multiplePropertiesRef, emptyFavouritesData);
 
-        output.forEach((nestedItem)=>{
-            expect(Array.isArray(nestedItem)).toBe(true);
-        });
+        expect(output).toEqual([]);
+        expect(output).not.toBe(emptyFavouritesData);
+    });
+    test("empty ref object input returns an empty array", ()=>{
+        expect(insertFavourites({}, multiplePropertiesRef, favouritesData)).toEqual([]);
+        expect(insertFavourites(multipleUsersRef, {}, favouritesData)).toEqual([]);
+    });
+    test("property id-user id pairs are omitted if user (guest) name does not exist in userRef", ()=>{
+        const missingUserRef = {"Frank White": 3, "Rachel Cummings": 4};
+
+        expect(insertFavourites(missingUserRef, multiplePropertiesRef, favouritesData)).toEqual([[3, 6]]);
+    });
+    test("property id-user id pairs are omitted if property name does not exist in propertyRef", ()=>{
+        const missingPropertyRef = {"Modern Apartment in City Center": 6, "Chic Studio Near the Beach": 8};
+
+        expect(insertFavourites(multipleUsersRef, missingPropertyRef, favouritesData)).toEqual([[3, 6]]);
+    });
+    test("property id-user id pair is omitted if favourites data has no guest name key", ()=>{
+        const noGuestFavouritesData = [
+            {
+                "property_name": "Cosy Country Cottage"
+            },
+            {
+                "guest_name": "Frank White", 
+                "property_name": "Modern Apartment in City Center"
+            }
+        ];
+
+        expect(insertFavourites(multipleUsersRef, multiplePropertiesRef, noGuestFavouritesData)).toEqual([[3, 6]]);
+    });
+    test("property id-user id pair is omitted if favourites data has no property name key", ()=>{
+        const noPropertyFavouritesData = [
+            {
+                "guest_name": "Bob Smith"
+            },
+            {
+                "guest_name": "Frank White", 
+                "property_name": "Modern Apartment in City Center"
+            }
+        ];
+
+        expect(insertFavourites(multipleUsersRef, multiplePropertiesRef, noPropertyFavouritesData)).toEqual([[3, 6]]);
     });
     test("the inputted objects are not mutated", ()=>{
-        insertFavourites(multipleUsersRef, multiplePropertiesRef, multipleFavouritesData);
+        insertFavourites(multipleUsersRef, multiplePropertiesRef, favouritesData);
 
         expect(multipleUsersRef).toEqual({"Bob Smith": 2, "Frank White": 3});
         expect(multiplePropertiesRef).toEqual({"Cosy Country Cottage": 4, "Modern Apartment in City Center": 6});
     });
     test("the inputted array is not mutated", ()=>{
-        insertFavourites(multipleUsersRef, multiplePropertiesRef, multipleFavouritesData);
+        insertFavourites(multipleUsersRef, multiplePropertiesRef, favouritesData);
 
-        expect(multipleFavouritesData).toEqual([
+        expect(favouritesData).toEqual([
             {
                 "guest_name": "Bob Smith", 
                 "property_name": "Cosy Country Cottage"
@@ -81,8 +117,8 @@ describe("insertFavourites", ()=>{
         ]);
     });
     test("the outputted array is new", ()=>{
-        const output = insertFavourites(multipleUsersRef, multiplePropertiesRef, multipleFavouritesData);
+        const output = insertFavourites(multipleUsersRef, multiplePropertiesRef, favouritesData);
 
-        expect(multipleFavouritesData).not.toBe(output);
+        expect(favouritesData).not.toBe(output);
     })
 })
