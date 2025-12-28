@@ -24,27 +24,44 @@ describe("createUsersRef", () => {
   test("an empty input array returns an empty object", () => {
     expect(createUsersRef([])).toEqual({});
   });
-  test("assigns first_name and surname (host name) as the key on the ref object for one user", () => {
+  test("creates a ref mapping host full name to user_id, for one user", () => {
     const userRef = createUsersRef([userOne]);
 
     expect(userRef).toHaveProperty("Alice Johnson");
-  });
-  test("assigns user_id as the value to the host name key for one user", () => {
-    const userRef = createUsersRef([userOne]);
-
     expect(userRef["Alice Johnson"]).toBe(1);
   });
-  test("assigns first_name and surname (host name) as the key on the ref object for multiple users", () => {
+  test("creates a ref mapping host full name to user_id, for multiple users", () => {
     const usersRef = createUsersRef([userOne, userTwo]);
 
     expect(usersRef).toHaveProperty("Alice Johnson");
     expect(usersRef).toHaveProperty("Emma Davis");
-  });
-  test("assigns user_id as the value to the host name key for multiple users", () => {
-    const usersRef = createUsersRef([userOne, userTwo]);
 
     expect(usersRef["Alice Johnson"]).toBe(1);
     expect(usersRef["Emma Davis"]).toBe(3);
+  });
+  test("a ref is not created for a user that does not have a first_name key", ()=>{
+    noFirstNameUserData = [
+      {surname: "Johnson", user_id: 1},
+      {first_name: "Emma", surname: "Davis", user_id: 3}
+    ];
+
+    expect(createUsersRef(noFirstNameUserData)).toEqual({"Emma Davis": 3});
+  });
+  test("a ref is not created for a user that does not have a surname key", ()=>{
+    noSurnameUserData = [
+      {first_name: "Alice", user_id: 1},
+      {first_name: "Emma", surname: "Davis", user_id: 3}
+    ];
+
+    expect(createUsersRef(noSurnameUserData)).toEqual({"Emma Davis": 3});
+  });
+  test("a ref is not created for a user that does not have a user_id key", ()=>{
+    noUserIDUserData = [
+      {first_name: "Alice", surname: "Johnson"},
+      {first_name: "Emma", surname: "Davis", user_id: 3}
+    ];
+    
+    expect(createUsersRef(noUserIDUserData)).toEqual({"Emma Davis": 3});
   });
   test("the input array is not mutated", () => {
     const input = [
