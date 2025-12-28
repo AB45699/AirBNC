@@ -1,106 +1,90 @@
-const formatAmenities = require("./insertAmenities.js"); 
+const insertAmenities = require("./insertAmenities.js"); 
 
-describe("formatAmenities", ()=>{
+describe("insertAmenities", ()=>{
     test("returns an array", ()=>{
-        expect(Array.isArray(formatAmenities([]))).toBe(true);
+        expect(Array.isArray(insertAmenities([]))).toBe(true);
     });
-    test("returns an empty array if passed an empty array", ()=>{
-        const input = []; 
+    test("returns a new empty array if passed an empty array of propertyData", ()=>{
+        const emptyPropertyInput = []; 
+        const output = insertAmenities(emptyPropertyInput);
 
-        expect(formatAmenities(input)).toEqual([]);
-    }); 
-    test("the empty array returned when input is empty, is new", ()=>{
-        const input = []; 
-        const output = formatAmenities(input);
-
-        expect(input).not.toBe(output);
-    }); 
-    test("if amenities are empty for a single property input, an empty array is returned", ()=>{
-        const singleAmenity = [{amenities: []}];
-
-        expect(formatAmenities(singleAmenity)).toEqual([]);
-    });
-    test("a new empty array is returned when amenities for a single property input is empty", ()=>{
-        const singleAmenity = [{amenities: []}];
-        const output = formatAmenities(singleAmenity);
-
-        expect(output).not.toBe(singleAmenity);
-    })
-    test("nests a single amenity within the returned array", ()=>{
+        expect(output).toEqual([]);
+        expect(output).not.toBe(emptyPropertyInput);
+    });  
+    test("nests a single amenity within the returned array, for a single property", ()=>{
         const singleAmenity = [{amenities: ["Wifi"]}];
-        const output = formatAmenities(singleAmenity);
+        const output = insertAmenities(singleAmenity);
 
         expect(output).toEqual([["Wifi"]]);
     });
-    test("nests multiple unique amenities within the returned array", ()=>{
+    test("nests multiple amenities within the returned array, for a single property", ()=>{
         const multipleAmenities = [{amenities: ["Wifi", "TV", "Kitchen"]}];
-        const output = formatAmenities(multipleAmenities);
+        const output = insertAmenities(multipleAmenities);
 
         expect(output).toEqual([["Wifi"], ["TV"], ["Kitchen"]]);
     });
-    test("nests multiple amenities within the returned array, duplicates are ommitted", ()=>{
+    test("for a single property, nests multiple amenities within the returned array; duplicates are omitted", ()=>{
         const multipleAmenities = [{amenities: ["Wifi", "Wifi", "TV", "Kitchen"]}];
-        const output = formatAmenities(multipleAmenities);
+        const output = insertAmenities(multipleAmenities);
 
         expect(output).toEqual([["Wifi"], ["TV"], ["Kitchen"]]);
     });
-    test("nests unqiue amenities into one array, for multiple properties", ()=>{
+    test("nests unique amenities into one array, for multiple properties", ()=>{
         const multiplePropertiesAmenities = [
-            {
-                amenities: ["WiFi", "TV", "Kitchen"]
-            },
-            {
-                amenities: ["Parking", "Iron", "WiFi"]
-            }
+            {amenities: ["WiFi", "TV", "Kitchen"]},
+            {amenities: ["Parking", "Iron", "WiFi"]}
         ];
-        const output = formatAmenities(multiplePropertiesAmenities);
+        const output = insertAmenities(multiplePropertiesAmenities);
       
         expect(output).toEqual([["WiFi"], ["TV"], ["Kitchen"], ["Parking"], ["Iron"]]);
     });
-    test("if amenities are empty for one property, those for the other are returned", ()=>{
+    test("if amenities are empty for a property, those for the other are returned", ()=>{
         const multiplePropertiesAmenities = [
-            {
-                amenities: []
-            },
-            {
-                amenities: ["Parking", "Iron", "WiFi"]
-            }
+            {amenities: []},
+            {amenities: ["Parking", "Iron", "WiFi"]}
         ];
-        const output = formatAmenities(multiplePropertiesAmenities);
+        const output = insertAmenities(multiplePropertiesAmenities);
       
         expect(output).toEqual([["Parking"], ["Iron"], ["WiFi"]]);
     });
-    test("the outputted array is new", ()=>{
+    test("only amenities for a valid amenities array are returned", ()=>{
         const multiplePropertiesAmenities = [
-            {
-                amenities: ["WiFi", "TV", "Kitchen"]
-            },
-            {
-                amenities: ["Parking", "Iron", "WiFi"]
-            }
+            {amenities: 123},
+            {amenities: {}},
+            {amenities: ["Parking", "Iron", "WiFi"]}
         ];
-        const output = formatAmenities(multiplePropertiesAmenities);
+        const output = insertAmenities(multiplePropertiesAmenities);
+
+        expect(output).toEqual([["Parking"], ["Iron"], ["WiFi"]]);
+    })
+    test("amenities are returned for properties with an amenities key", ()=>{
+        const multiplePropertiesAmenities = [
+            {amenities: ["Iron", "Coffee maker", "WiFi"]},
+            { }
+        ];
+        const output = insertAmenities(multiplePropertiesAmenities);
+      
+        expect(output).toEqual([["Iron"], ["Coffee maker"], ["WiFi"]]);
+    });
+    test("the output array is new", ()=>{
+        const multiplePropertiesAmenities = [
+            {amenities: ["WiFi", "TV", "Kitchen"]},
+            {amenities: ["Parking", "Iron", "WiFi"]}
+        ];
+        const output = insertAmenities(multiplePropertiesAmenities);
 
         expect(multiplePropertiesAmenities).not.toBe(output);
     });
     test("the inputted array is not mutated", ()=>{
         const multiplePropertiesAmenities = [
-            {
-                amenities: ["WiFi", "TV", "Kitchen"]
-            },
-            {
-                amenities: ["Parking", "Iron", "WiFi"]
-            }
+            {amenities: ["WiFi", "TV", "Kitchen"]},
+            {amenities: ["Parking", "Iron", "WiFi"]}
         ];
-        formatAmenities(multiplePropertiesAmenities);
+        insertAmenities(multiplePropertiesAmenities);
 
         expect(multiplePropertiesAmenities).toEqual([
-            {
-                amenities: ["WiFi", "TV", "Kitchen"]
-            },
-            {
-                amenities: ["Parking", "Iron", "WiFi"]
-            }
-        ])
+            {amenities: ["WiFi", "TV", "Kitchen"]},
+            {amenities: ["Parking", "Iron", "WiFi"]}
+        ]);
     });
 }) 
