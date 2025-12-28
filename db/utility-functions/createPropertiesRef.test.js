@@ -22,27 +22,36 @@ describe("createPropertiesRef", () => {
   test("an empty input array returns an empty object", () => {
     expect(createPropertiesRef([])).toEqual({});
   });
-  test("assigns name (the property name) as the key on the ref object for one property", () => {
+  test("creates a ref where the property name is the key and the property_id is the value (for a single property)", () => {
     const propertyRef = createPropertiesRef([propertyOne]);
 
     expect(propertyRef).toHaveProperty("Modern Apartment in City Center");
-  });
-  test("assigns the property_id as the value to the property name key, for one property", () => {
-    const propertyRef = createPropertiesRef([propertyOne]);
-
     expect(propertyRef["Modern Apartment in City Center"]).toBe(1);
   });
-  test("assigns name (the property name) as the key on the ref object for multiple properties", () => {
+  test("creates a ref where the property name is the key and the property_id is the value (for multiple properties)", () => {
     const propertyRef = createPropertiesRef([propertyOne, propertyTwo]);
 
     expect(propertyRef).toHaveProperty("Modern Apartment in City Center");
     expect(propertyRef).toHaveProperty("Spacious Countryside House");
-  });
-  test("assigns the property_id as the value to the property name key, for multiple properties", () => {
-    const propertyRef = createPropertiesRef([propertyOne, propertyTwo]);
 
     expect(propertyRef["Modern Apartment in City Center"]).toBe(1);
     expect(propertyRef["Spacious Countryside House"]).toBe(7);
+  });
+  test("a ref is not created for a property that does not have a name key", ()=>{
+    const noNamePropertyData = [
+      { property_id: 1 },
+      { name: "Spacious Countryside House", property_id: 7 },
+    ];
+
+    expect(createPropertiesRef(noNamePropertyData)).toEqual({"Spacious Countryside House": 7});
+  });
+  test("a ref is not created for a property that does not have a property id key", ()=>{
+    const noIDPropertyData = [
+      { name: "Modern Apartment in City Center", property_id: 1 },
+      { name: "Spacious Countryside House" },
+    ];
+
+    expect(createPropertiesRef(noIDPropertyData)).toEqual({"Modern Apartment in City Center": 1});
   });
   test("the input array is not mutated", () => {
     const input = [
