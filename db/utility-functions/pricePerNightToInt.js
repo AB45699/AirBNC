@@ -1,5 +1,5 @@
 function pricePerNightToInt (properties) {
-    let pricesPerNightToInt = [];
+    const pricesPerNightToInt = [];
 
     properties.forEach((property)=>{
         pricesPerNightToInt.push({...property, price_per_night: Number(property.price_per_night)});
