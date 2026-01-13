@@ -33,7 +33,7 @@ exports.fetchProperties = async (sort="favourites", order="desc", maxprice=null,
         FROM properties 
         JOIN users 
             ON properties.host_id = users.user_id
-         LEFT JOIN (
+        LEFT OUTER JOIN (
             SELECT DISTINCT ON (property_id) property_id, image_url 
             FROM images 
             ORDER BY property_id, image_id) 
@@ -74,15 +74,23 @@ exports.fetchProperty = async (id, user_id) => {
             properties.description, 
             CONCAT(users.first_name, ' ', users.surname) AS host,
             users.avatar AS host_avatar,
-            COUNT(favourites.property_id) AS favourite_count
+            COUNT(favourites.property_id) AS favourite_count,
+            all_images.images_array AS images
         `;
 
     let joinQuery = ` 
         FROM properties
         JOIN users 
-        ON properties.host_id = users.user_id
+            ON properties.host_id = users.user_id
         LEFT OUTER JOIN favourites
-        ON properties.property_id = favourites.property_id
+            ON properties.property_id = favourites.property_id
+        LEFT OUTER JOIN (
+            SELECT 
+                property_id, 
+                ARRAY_AGG(image_url) AS images_array
+            FROM images
+            GROUP BY property_id
+        ) all_images ON all_images.property_id = properties.property_id
         `;
 
     let groupByQuery = `
@@ -94,7 +102,8 @@ exports.fetchProperty = async (id, user_id) => {
             properties.description,
             users.first_name,
             users.surname,
-            users.avatar 
+            users.avatar,
+            all_images.images_array
         `;
 
     if (user_id) {
