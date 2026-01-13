@@ -30,14 +30,17 @@ exports.fetchProperties = async (sort="favourites", order="desc", maxprice=null,
             images.image_url AS image,
             favourites.favourites_count AS favourites,
             reviews.avg_rating 
+        
         FROM properties 
         JOIN users 
             ON properties.host_id = users.user_id
+
         LEFT OUTER JOIN (
             SELECT DISTINCT ON (property_id) property_id, image_url 
             FROM images 
             ORDER BY property_id, image_id) 
         images ON properties.property_id = images.property_id
+
         LEFT OUTER JOIN (
             SELECT 
                 property_id, 
@@ -45,6 +48,7 @@ exports.fetchProperties = async (sort="favourites", order="desc", maxprice=null,
             FROM favourites
             GROUP BY property_id
         ) favourites ON properties.property_id = favourites.property_id
+
         LEFT OUTER JOIN (
             SELECT 
                 property_id, 
@@ -52,10 +56,12 @@ exports.fetchProperties = async (sort="favourites", order="desc", maxprice=null,
             FROM reviews
             GROUP BY property_id
         ) reviews ON properties.property_id = reviews.property_id
+
         WHERE 
             ($1::numeric IS NULL OR properties.price_per_night <= $1::numeric) AND
             ($2::numeric IS NULL OR properties.price_per_night >= $2::numeric) AND
             ($3::text IS NULL OR properties.property_type = $3::text)
+
         ORDER BY ${allowedSortQueries[sort.toLowerCase()]} ${order}, properties.property_id ASC;`, queryValues
     );
     
@@ -82,8 +88,10 @@ exports.fetchProperty = async (id, user_id) => {
         FROM properties
         JOIN users 
             ON properties.host_id = users.user_id
+
         LEFT OUTER JOIN favourites
             ON properties.property_id = favourites.property_id
+            
         LEFT OUTER JOIN (
             SELECT 
                 property_id, 
