@@ -254,7 +254,7 @@ describe("app", () => {
     );
     test("property with id 2 is returned with the expected keys and values", async () => {
       const { body } = await request(app).get("/api/properties/2");
-
+      
       expect(body.property).toMatchObject({
         property_id: 2,
         property_name: "Cosy Family House",
@@ -263,7 +263,8 @@ describe("app", () => {
         description: "Description of Cosy Family House.",
         host: "Alice Johnson",
         host_avatar: "https://example.com/images/alice.jpg", 
-        favourite_count: "4"
+        favourite_count: "4",
+        images:["https://example.com/images/cosy_family_house_1.jpg", "https://example.com/images/cosy_family_house_2.jpg"]
       })
     });
     test("400: invalid property id", async () => {
