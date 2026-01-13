@@ -58,5 +58,10 @@
     "property_name": "Quaint Cottage in the Hills",
     "image_url": "https://example.com/images/quaint_cottage_1.jpg",
     "alt_tag": "Alt tag for Quaint Cottage in the Hills"
+  },
+  {
+    "property_name": "Cosy Family House",
+    "image_url": "https://example.com/images/cosy_family_house_2.jpg",
+    "alt_tag": "Alt tag for Cosy Family House 2"
   }
 ]
