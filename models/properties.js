@@ -81,7 +81,9 @@ exports.fetchProperty = async (id, user_id) => {
             CONCAT(users.first_name, ' ', users.surname) AS host,
             users.avatar AS host_avatar,
             COUNT(favourites.property_id) AS favourite_count,
-            all_images.images_array AS images
+            all_images.images_array AS images,
+            r.review_count,
+            r.avg_rating
         `;
 
     let joinQuery = ` 
@@ -99,6 +101,15 @@ exports.fetchProperty = async (id, user_id) => {
             FROM images
             GROUP BY property_id
         ) all_images ON all_images.property_id = properties.property_id
+
+        LEFT OUTER JOIN (
+            SELECT 
+                property_id, 
+                ROUND(AVG(rating), 2) AS avg_rating,
+                COUNT(*) AS review_count
+            FROM reviews
+            GROUP BY property_id
+        ) r ON properties.property_id = r.property_id
         `;
 
     let groupByQuery = `
@@ -111,7 +122,9 @@ exports.fetchProperty = async (id, user_id) => {
             users.first_name,
             users.surname,
             users.avatar,
-            all_images.images_array
+            all_images.images_array,
+            r.review_count,
+            r.avg_rating
         `;
 
     if (user_id) {

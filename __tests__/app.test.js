@@ -264,7 +264,9 @@ describe("app", () => {
         host: "Alice Johnson",
         host_avatar: "https://example.com/images/alice.jpg", 
         favourite_count: "4",
-        images:["https://example.com/images/cosy_family_house_1.jpg", "https://example.com/images/cosy_family_house_2.jpg"]
+        images:["https://example.com/images/cosy_family_house_1.jpg", "https://example.com/images/cosy_family_house_2.jpg"],
+        review_count: "3", 
+        avg_rating: "2.67"
       })
     });
     test("400: invalid property id", async () => {
@@ -335,7 +337,7 @@ describe("app", () => {
         .expect(201);
 
       expect(body.propertyReview).toMatchObject({
-        review_id: 17,
+        review_id: 20,
         property_id: 4,
         guest_id: 5,
         rating: 5,
@@ -370,7 +372,7 @@ describe("app", () => {
           .expect(201);
 
         expect(body.propertyReview).toMatchObject({
-          review_id: 17,
+          review_id: 20,
           property_id: 4,
           guest_id: 5,
           rating: 5,
@@ -503,7 +505,7 @@ describe("app", () => {
         expect(body.msg).toBe("Property not found");
       });
       test("for a valid property with no reviews, an empty array is returned", async () => {
-        const { body } = await request(app).get("/api/properties/2/reviews");
+        const { body } = await request(app).get("/api/properties/8/reviews");
 
         expect(body.reviews).toEqual([]);
       });
